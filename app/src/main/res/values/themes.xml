@@ -1,0 +1,8 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Base.Theme.DailyQuest" parent="Theme.Material3.DynamicColors.Light.NoActionBar">
+
+    </style>
+
+    <style name="Theme.DailyQuest" parent="Base.Theme.DailyQuest" />
+</resources>

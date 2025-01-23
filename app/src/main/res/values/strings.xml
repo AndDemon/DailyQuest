@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">DailyQuest</string>
+    <string name="hey_there_enter_your_details">Hey there,\n<b>Enter your details</b></string>
+    <string name="your_name">Your name</string>
+    <string name="your_age">Your age</string>
+    <string name="your_height">Your height</string>
+    <string name="your_weight">Your weight</string>
+    <string name="log_in">Log in</string>
+    <string name="required">Required*</string>
+
+</resources>
