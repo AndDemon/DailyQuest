@@ -1,16 +1,13 @@
 package com.hrysenko.dailyquest.presentation.main
 
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import androidx.room.Room
-import com.hrysenko.dailyquest.R
 import com.hrysenko.dailyquest.databinding.ActivityMainBinding
-import com.hrysenko.dailyquest.room.database.AppDatabase
+import com.hrysenko.dailyquest.models.AppDatabase
+import com.hrysenko.dailyquest.presentation.login.LoginActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -18,18 +15,24 @@ import kotlinx.coroutines.withContext
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var database: AppDatabase
+    private lateinit var preferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        database = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java, "dailyquest_db"
-        ).build()
+        database = AppDatabase.getDatabase(this)
+        preferences = getSharedPreferences("dailyquest_prefs", MODE_PRIVATE)
 
         loadUserData()
+
+        // Логіка виходу
+        binding.logoutButton.setOnClickListener {
+            preferences.edit().putBoolean("is_registered", false).apply()
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
     }
 
     private fun loadUserData() {
@@ -43,6 +46,8 @@ class MainActivity : AppCompatActivity() {
                     binding.userHeight.text = "Зріст: ${it.height} см"
                     binding.userWeight.text = "Вага: ${it.weight} кг"
                     binding.userSex.text = "Стать: ${it.sex}"
+                    binding.userGoal.text = "Мета: ${it.goal}"
+                    binding.userPhysLevel.text = "Фізичний рівень: ${it.physLevel}"
                 }
             }
         }

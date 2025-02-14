@@ -1,6 +1,5 @@
-package com.hrysenko.dailyquest.room.dao
+package com.hrysenko.dailyquest.models.quest.room
 import androidx.room.*
-import com.hrysenko.dailyquest.room.entities.Quest
 
 @Dao
 interface QuestDao {

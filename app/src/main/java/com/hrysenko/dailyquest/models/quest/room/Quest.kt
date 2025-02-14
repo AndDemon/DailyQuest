@@ -1,4 +1,4 @@
-package com.hrysenko.dailyquest.room.entities
+package com.hrysenko.dailyquest.models.quest.room
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

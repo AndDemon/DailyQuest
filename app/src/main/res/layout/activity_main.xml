@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -7,45 +8,78 @@
     android:layout_height="match_parent"
     tools:context=".presentation.main.MainActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:id="@+id/userName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ім'я:"
-            android:textSize="18sp"
-            android:layout_marginTop="16dp"/>
+        android:layout_height="match_parent"
+        android:padding="16dp">
 
-        <TextView
-            android:id="@+id/userAge"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Вік:"
-            android:textSize="18sp"/>
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
-        <TextView
-            android:id="@+id/userHeight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Зріст:"
-            android:textSize="18sp"/>
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ім'я:"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"/>
 
-        <TextView
-            android:id="@+id/userWeight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Вага:"
-            android:textSize="18sp"/>
+            <TextView
+                android:id="@+id/userAge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Вік:"
+                android:textSize="20sp"/>
 
-        <TextView
-            android:id="@+id/userSex"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Стать:"
-            android:textSize="18sp"/>
+            <TextView
+                android:id="@+id/userHeight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Зріст:"
+                android:textSize="20sp"/>
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/userWeight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Вага:"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/userSex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Стать:"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/userGoal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Мета:"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/userPhysLevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Фізичний рівень:"
+                android:textSize="20sp"/>
+
+            <Button
+                android:id="@+id/logoutButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Вийти"
+                android:layout_marginTop="20dp"/>
+
+        </LinearLayout>
+
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

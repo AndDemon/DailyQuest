@@ -1,11 +1,10 @@
-package com.hrysenko.dailyquest.room.dao
+package com.hrysenko.dailyquest.models.user.room
 import androidx.room.*
-import com.hrysenko.dailyquest.room.entities.User
 
 @Dao
 interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(user: User)
+    suspend fun insertUser(user: User)
 
     @Update
     suspend fun updateUser(user: User)

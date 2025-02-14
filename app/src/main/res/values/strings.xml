@@ -7,5 +7,23 @@
     <string name="your_weight">Your weight</string>
     <string name="log_in">Log in</string>
     <string name="required">Required*</string>
+    <string name="pl_fill_all">Будь ласка, заповніть усі поля!</string>
+
+    <string-array name="sex_options">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <string-array name="goal_options">
+        <item>Lose weight</item>
+        <item>Gain muscle mass</item>
+        <item>Maintain fitness</item>
+    </string-array>
+
+    <string-array name="phys_level_options">
+        <item>Beginner</item>
+        <item>Intermediate</item>
+        <item>Advanced</item>
+    </string-array>
 
 </resources>
