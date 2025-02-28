@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -22,6 +24,7 @@ android {
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas")
         }
+
     }
 
     buildTypes {
@@ -65,7 +68,10 @@ dependencies {
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui)
     implementation(libs.androidx.fragment.ktx)
-
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation (libs.okhttp)
+    implementation(libs.androidx.webkit)
 
 
 

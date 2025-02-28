@@ -1,7 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">DailyQuest</string>
-
+    <string name="get_started">Почати</string>
+    <string name="your_name">Ваше ім\'я</string>
+    <string name="your_age">Ваш вік</string>
+    <string name="your_height">Ваш зріст</string>
+    <string name="your_weight">Ваша вага</string>
+    <string name="log_in">Увійти</string>
+    <string name="required">Обов\'язково*</string>
+    <string name="error_age_limit">Вік не може бути більше 125 років</string>
+    <string name="error_height_limit">Висота не повинна перевищувати 250 см</string>
+    <string name="error_weight_limit">Вага не може перевищувати 650 кг</string>
+    <string name="error_fill_all_fields">Будь ласка, заповніть усі поля</string>
+    <string name="daily_quest">Щоденний квест</string>
+    <string name="profile">Профіль</string>
+    <string name="home">Головна</string>
+    <string name="welcome_to">Ласкаво просимо до</string>
+    <string name="hey_there_enter_your_details">Привіт, <b>введіть ваші дані</b></string>
+    <string name="edit">Редагувати</string>
+    <string name="height">Зріст</string>
+    <string name="weight">Вага</string>
+    <string name="age">Вік</string>
+    <string name="cm">см</string>
+    <string name="yo">р</string>
+    <string name="kg">кг</string>
+    <string name="other">Інше</string>
+    <string name="support">Підтримка</string>
+    <string name="about">Про додаток</string>
+    <string name="settings">Налаштування</string>
+    <string name="login_successful">Успішно!</string>
+    <string name="done">Готово</string>
+    <string name="add_new_quest">Додати новий квест</string>
+    <string name="day_streak">Відрізок: </string>
+    <string name="ok">Ок</string>
+    <string name="cancelb">Скасувати</string>
+    <string name="welcome_back">З поверненням,</string>
+    <string name="hey_there_edit_your_details"><b>Відредагуйте свої дані</b></string>
+    <string name="view_more">Переглянути більше</string>
+    <string name="bmi_body_mass_index">ІМТ (Індекс маси тіла)</string>
+    <string name="you_are_underweight">Ви маєте недостатню вагу</string>
+    <string name="you_have_a_normal_weight">Ви маєте нормальну вагу</string>
+    <string name="you_are_overweight">Ви маєте надмірну вагу</string>
+    <string name="you_are_obese">Ви страждаєте на ожиріння</string>
+    <string name="check">Перевірити</string>
+    <string name="today_quest">Сьогоднішній квест</string>
+    <string name="bmi_recommendations">Рекомендації за індексом маси тіла (BMI)</string>
+    <string name="bmi_info">Ваш індекс маси тіла (BMI): %.1f.\n%s</string>
+    <string name="bmi_underweight_recommendation">Ваш індекс маси тіла нижче норми. Намагайтеся вживати більше поживної їжі та проконсультуйтеся з дієтологом для отримання персональних порад.</string>
+    <string name="bmi_normal_recommendation">Ваш індекс маси тіла в межах норми. Підтримуйте поточний спосіб життя, збалансоване харчування та регулярні фізичні навантаження.</string>
+    <string name="bmi_overweight_recommendation">Ваш індекс маси тіла дещо перевищує норму. Спробуйте додати більше фізичної активності до свого розпорядку та зверніть увагу на збалансоване харчування. За необхідності проконсультуйтеся з лікарем.</string>
+    <string name="bmi_obese_recommendation">Ваш індекс маси тіла вказує на ожиріння. Важливо звернутися до лікаря або медичного фахівця для розробки детального плану, який може включати зміни в харчуванні та збільшення фізичної активності.</string>
+    <string name="delete">Видалити</string>
+    <string name="normal_quests">Звичайні квести</string>
+    <string name="custom_quests">Індивідуальні квести</string>
+    <string name="please_complete_all_quests">Будь ласка, заверште всі квести!</string>
+    <string name="push_ups">Віджимання</string>
+    <string name="sit_ups">Прес</string>
+    <string name="squats">Присідання</string>
+    <string name="distance">Відстань</string>
+    <string name="easy">Легкий</string>
+    <string name="medium">Середній</string>
+    <string name="hard">Важкий</string>
+    <string name="you_ve_already_confirmed_all_quests_today">Ви вже виконали всі квести сьогодні!</string>
+    <string name="chat_assistant">Чат-помічник</string>
     <string-array name="sex_options">
         <item>Чоловік</item>
         <item>Жінка</item>
@@ -18,4 +78,18 @@
         <item>Середній</item>
         <item>Просунутий</item>
     </string-array>
+    <string name="confirm_all_quests">Підтвердити всі квести</string>
+    <string name="save">Зберегти</string>
+    <string name="repetitions">Кількість повторень</string>
+    <string name="enter_quest_name">Введіть назву квесту</string>
+    <string name="upper_body">Верхня частина тіла</string>
+    <string name="full_body_stretching">Розтяжка всього тіла</string>
+    <string name="_30_minutes_1000_kcal_5_exercises">30 хвилин, 1000 ккал, 5 вправ</string>
+    <string name="_20_minutes_1240_kcal_5_exercises">20 хвилин, 1240 ккал, 5 вправ</string>
+    <string name="workout">Тренування</string>
+    <string name="strength_training">Силове тренування</string>
+    <string name="cardio_for_legs">Кардіо для ніг</string>
+    <string name="_55_minutes_1400_kcal_6_exercises">55 хвилин, 1400 ккал, 6 вправ</string>
+    <string name="_30_minutes_1340_kcal_6_exercises">30 хвилин, 1340 ккал, 6 вправ</string>
+    <string name="time_to_complete_your_daily_fitness_quests">Час виконувати свої щоденні фітнес-квести!</string>
 </resources>

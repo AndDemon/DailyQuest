@@ -54,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
         val physLevel = binding.loginPhysLevel.selectedItem.toString()
 
         if (name.isEmpty() || age == null || height == null || weight == null) {
-            Toast.makeText(this, getString(R.string.pl_fill_all), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.error_fill_all_fields), Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -71,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
             database.userDao().insertUser(user)
 
-            // Зберігаємо інформацію, що користувач зареєстрований
+
             preferences.edit().putBoolean("is_registered", true).apply()
 
             withContext(Dispatchers.Main) {

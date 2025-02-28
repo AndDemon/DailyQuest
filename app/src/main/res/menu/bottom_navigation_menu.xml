@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/main"
+        android:enabled="true"
+        android:title="@string/home"
+        android:icon="@drawable/baseline_home_24" />
+    <item
+        android:id="@+id/assistant"
+        android:enabled="true"
+        android:title="@string/chat_assistant"
+        android:icon="@drawable/baseline_assistant_24" />
+    <item
+        android:id="@+id/dailyQuest"
+        android:enabled="true"
+        android:title="@string/daily_quest"
+        android:icon="@drawable/baseline_rocket_launch_24" />
+    <item
+        android:id="@+id/profile"
+        android:enabled="true"
+        android:title="@string/profile"
+        android:icon="@drawable/baseline_person_24" />
+
+</menu>
