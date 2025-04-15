@@ -25,6 +25,12 @@ class GoalFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        binding.backButton.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+
+
         binding.nextButton.setOnClickListener {
             viewModel.goal = binding.goalSpinner.selectedItem.toString()
             (activity as? LoginActivity)?.showFragment(PhysLevelFragment())

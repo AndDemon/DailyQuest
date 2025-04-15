@@ -6,12 +6,24 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
+    <ImageButton
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_back"
+        android:background="?android:attr/selectableItemBackground"
+        app:tint="?attr/colorOnSurface"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:padding="12dp"/>
+
     <TextView
         android:id="@+id/goal_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ваша ціль"
+        android:text="@string/your_goal"
         android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -29,7 +41,7 @@
         android:id="@+id/next_button"
         android:layout_width="match_parent"
         android:layout_height="58dp"
-        android:text="Далі"
+        android:text="@string/cont"
         android:textSize="18sp"
         android:layout_marginTop="32dp"
         app:layout_constraintBottom_toBottomOf="parent"

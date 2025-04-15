@@ -32,6 +32,10 @@ class PhysLevelFragment : Fragment() {
             .setDuration(300)
             .start()
 
+        binding.backButton.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+
         binding.nextButton.setOnClickListener {
             viewModel.physLevel = binding.physLevelSpinner.selectedItem.toString()
             (activity as? LoginActivity)?.showFragment(FinishFragment())

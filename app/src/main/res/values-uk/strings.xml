@@ -62,6 +62,7 @@
     <string name="hard">Важкий</string>
     <string name="you_ve_already_confirmed_all_quests_today">Ви вже виконали всі квести сьогодні!</string>
     <string name="chat_assistant">Чат-помічник</string>
+    <string name="back">Назад</string>
     <string-array name="sex_options">
         <item>Чоловік</item>
         <item>Жінка</item>
@@ -92,4 +93,29 @@
     <string name="_55_minutes_1400_kcal_6_exercises">55 хвилин, 1400 ккал, 6 вправ</string>
     <string name="_30_minutes_1340_kcal_6_exercises">30 хвилин, 1340 ккал, 6 вправ</string>
     <string name="time_to_complete_your_daily_fitness_quests">Час виконувати свої щоденні фітнес-квести!</string>
+    <string name="choose_sex">Виберіть стать</string>
+    <string name="enter_correct_age">Введіть коректний вік (10-100)</string>
+    <string name="n_years">%1$s років</string>
+    <string name="next">Далі</string>
+    <string name="female">Жінка</string>
+    <string name="male">Чоловік</string>
+    <string name="data_saved">Дані збережено!</string>
+    <string name="Fill_in_all_fields">Заповніть усі поля</string>
+    <string name="enter_your_name">Введіть ваше ім\'я</string>
+    <string name="start">Почати</string>
+    <string name="setup_profile_hint">Давайте налаштуємо ваш профіль для найкращого досвіду</string>
+    <string name="setup_profile_greeting">Ласкаво просимо до DailyQuest!</string>
+    <string name="enter_height">Введіть зріст від 100 до 250 см</string>
+    <string name="n_cm">%1$s см</string>
+    <string name="n_kg">%1$s кг</string>
+    <string name="enter_weight">Введіть вагу від 30 до 200 кг</string>
+    <string name="cont">Далі</string>
+    <string name="n30_years">30 років</string>
+    <string name="finish">Завершити</string>
+    <string name="what_name">Як вас звати?</string>
+    <string name="your_sex">Ваша стать</string>
+    <string name="your_goal">Ваша ціль</string>
+    <string name="n170_cm">170 см</string>
+    <string name="physical_activity_level">Рівень фізичної активності</string>
+    <string name="_70_kg">70 кг</string>
 </resources>

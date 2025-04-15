@@ -6,12 +6,25 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
+    <ImageButton
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_back"
+        android:background="?android:attr/selectableItemBackground"
+        app:tint="?attr/colorOnSurface"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:padding="12dp"/>
+
     <TextView
         android:id="@+id/height_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ваш зріст (см)"
+        android:text="@string/your_height"
         android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="?attr/colorOnSurface"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -20,29 +33,34 @@
         android:id="@+id/height_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="170 см"
-        android:textSize="32sp"
-        android:layout_marginTop="16dp"
+        android:text="@string/n170_cm"
+        android:textSize="48sp"
+        android:textColor="?attr/colorOnSurface"
         app:layout_constraintTop_toBottomOf="@id/height_label"
+        android:layout_marginTop="60dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <SeekBar
+    <com.google.android.material.slider.Slider
         android:id="@+id/height_seekbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:max="250"
-        android:progress="170"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/height_value"
+        android:layout_marginTop="32dp"
+        android:rotation="270"
+        android:stepSize="1"
+        android:value="170"
+        android:valueFrom="100"
+        android:valueTo="250"
+        app:layout_constraintBottom_toTopOf="@id/next_button"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/height_value" />
 
     <Button
         android:id="@+id/next_button"
         android:layout_width="match_parent"
         android:layout_height="58dp"
-        android:text="Далі"
+        android:text="@string/cont"
         android:textSize="18sp"
         android:layout_marginTop="32dp"
         app:layout_constraintBottom_toBottomOf="parent"

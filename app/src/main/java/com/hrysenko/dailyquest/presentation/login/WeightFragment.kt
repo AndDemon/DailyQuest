@@ -1,13 +1,19 @@
 package com.hrysenko.dailyquest.presentation.login
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SeekBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.google.android.material.slider.Slider
+import com.hrysenko.dailyquest.R
 import com.hrysenko.dailyquest.databinding.FragmentWeightBinding
 
 class WeightFragment : Fragment() {
@@ -15,6 +21,7 @@ class WeightFragment : Fragment() {
     private var _binding: FragmentWeightBinding? = null
     private val binding get() = _binding!!
     private val viewModel: LoginViewModel by activityViewModels()
+    private var lastVibratedWeight: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,39 +31,62 @@ class WeightFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("StringFormatMatches")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.weightSeekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                binding.weightValue.text = "$progress кг"
-                viewModel.weight = progress.toDouble()
-                binding.weightValue.animate()
-                    .scaleX(1.1f)
-                    .scaleY(1.1f)
-                    .setDuration(100)
-                    .withEndAction {
-                        binding.weightValue.animate()
-                            .scaleX(1.0f)
-                            .scaleY(1.0f)
-                            .setDuration(100)
-                            .start()
-                    }
-                    .start()
+        binding.weightSeekbar.addOnChangeListener { slider, value, fromUser ->
+            if (fromUser && lastVibratedWeight != value.toInt()) {
+                vibrateDevice()
+                lastVibratedWeight = value.toInt()
+            }
+            binding.weightValue.text = getString(R.string.n_kg, value.toInt())
+            viewModel.weight = value.toDouble()
+            binding.weightValue.animate()
+                .scaleX(1.1f)
+                .scaleY(1.1f)
+                .setDuration(100)
+                .withEndAction {
+                    binding.weightValue.animate()
+                        .scaleX(1.0f)
+                        .scaleY(1.0f)
+                        .setDuration(100)
+                        .start()
+                }
+                .start()
+        }
+
+        binding.weightSeekbar.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+            override fun onStartTrackingTouch(slider: Slider) {
+                lastVibratedWeight = null
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(slider: Slider) {}
         })
 
+        binding.backButton.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+
         binding.nextButton.setOnClickListener {
-            val weight = binding.weightSeekbar.progress
+            val weight = binding.weightSeekbar.value.toInt()
             if (weight < 30 || weight > 200) {
-                Toast.makeText(requireContext(), "Введіть вагу від 30 до 200 кг", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.enter_weight),
+                    Toast.LENGTH_SHORT
+                ).show()
                 return@setOnClickListener
             }
             viewModel.weight = weight.toDouble()
             (activity as? LoginActivity)?.showFragment(HeightFragment())
+        }
+    }
+
+    private fun vibrateDevice() {
+        val vibrator = requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if (vibrator.hasVibrator()) {
+            vibrator.vibrate(VibrationEffect.createOneShot(20, 5))
         }
     }
 

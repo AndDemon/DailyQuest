@@ -10,12 +10,14 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import com.hrysenko.dailyquest.R
 import com.hrysenko.dailyquest.databinding.FragmentFinishBinding
 import com.hrysenko.dailyquest.models.AppDatabase
 import com.hrysenko.dailyquest.presentation.main.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.core.content.edit
 
 class FinishFragment : Fragment() {
 
@@ -34,10 +36,15 @@ class FinishFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.backButton.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+
         binding.finishButton.setOnClickListener {
             val name = binding.loginName.text.toString().trim()
             if (name.isEmpty()) {
-                Toast.makeText(requireContext(), "Введіть ваше ім'я", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),
+                    getString(R.string.enter_your_name), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             viewModel.name = name
@@ -48,18 +55,20 @@ class FinishFragment : Fragment() {
                     database.userDao().insertUser(viewModel.toUser())
 
                     requireActivity().getSharedPreferences("dailyquest_prefs", MODE_PRIVATE)
-                        .edit()
-                        .putBoolean("is_registered", true)
-                        .apply()
+                        .edit() {
+                            putBoolean("is_registered", true)
+                        }
 
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(requireContext(), "Дані збережено!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(),
+                            getString(R.string.data_saved), Toast.LENGTH_SHORT).show()
                         startActivity(Intent(requireContext(), MainActivity::class.java))
                         requireActivity().finish()
                     }
                 }
             } else {
-                Toast.makeText(requireContext(), "Заповніть усі поля", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),
+                    getString(R.string.Fill_in_all_fields), Toast.LENGTH_SHORT).show()
             }
         }
     }

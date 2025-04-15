@@ -1,6 +1,10 @@
 package com.hrysenko.dailyquest.presentation.login
 
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,29 +34,31 @@ class GenderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         binding.root.alpha = 0f
         binding.root.animate()
             .alpha(1f)
             .setDuration(300)
             .start()
 
+        binding.backButton.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
 
         binding.maleCard.setOnClickListener {
-            selectedGender = "Чоловік"
+            vibrateDevice()
+            selectedGender = getString(R.string.male)
             updateCardSelection(binding.maleCard, binding.femaleCard)
         }
 
-
         binding.femaleCard.setOnClickListener {
-            selectedGender = "Жінка"
+            vibrateDevice()
+            selectedGender = getString(R.string.female)
             updateCardSelection(binding.femaleCard, binding.maleCard)
         }
 
-        // Обробка кнопки "Далі"
         binding.nextButton.setOnClickListener {
             if (selectedGender == null) {
-                Toast.makeText(requireContext(), "Виберіть стать", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.choose_sex), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             viewModel.sex = selectedGender!!
@@ -61,15 +67,11 @@ class GenderFragment : Fragment() {
     }
 
     private fun updateCardSelection(selectedCard: androidx.cardview.widget.CardView, unselectedCard: androidx.cardview.widget.CardView) {
-
         val selectedColor = MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorSecondaryContainer, ContextCompat.getColor(requireContext(), android.R.color.white))
         val unselectedColor = MaterialColors.getColor(requireContext(), com.google.android.material.R.attr.colorSurface, ContextCompat.getColor(requireContext(), android.R.color.white))
 
-
         selectedCard.setCardBackgroundColor(selectedColor)
-
         unselectedCard.setCardBackgroundColor(unselectedColor)
-
 
         selectedCard.animate()
             .scaleX(1.05f)
@@ -83,6 +85,13 @@ class GenderFragment : Fragment() {
                     .start()
             }
             .start()
+    }
+
+    private fun vibrateDevice() {
+        val vibrator = requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if (vibrator.hasVibrator()) {
+            vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
+        }
     }
 
     override fun onDestroyView() {
