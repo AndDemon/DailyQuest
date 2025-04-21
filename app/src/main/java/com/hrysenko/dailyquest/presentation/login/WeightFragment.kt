@@ -35,6 +35,13 @@ class WeightFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        binding.root.alpha = 0f
+        binding.root.animate()
+            .alpha(1f)
+            .setDuration(300)
+            .start()
+
         binding.weightSeekbar.addOnChangeListener { slider, value, fromUser ->
             if (fromUser && lastVibratedWeight != value.toInt()) {
                 vibrateDevice()
@@ -86,7 +93,12 @@ class WeightFragment : Fragment() {
     private fun vibrateDevice() {
         val vibrator = requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         if (vibrator.hasVibrator()) {
-            vibrator.vibrate(VibrationEffect.createOneShot(20, 5))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val effect = VibrationEffect.createPredefined(VibrationEffect.EFFECT_HEAVY_CLICK)
+                vibrator.vibrate(effect)
+            } else {
+                vibrator.vibrate(VibrationEffect.createOneShot(20, 5))
+            }
         }
     }
 

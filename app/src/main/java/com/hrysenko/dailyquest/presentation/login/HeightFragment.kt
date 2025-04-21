@@ -1,5 +1,6 @@
 package com.hrysenko.dailyquest.presentation.login
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
@@ -30,8 +31,16 @@ class HeightFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("StringFormatMatches")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        binding.root.alpha = 0f
+        binding.root.animate()
+            .alpha(1f)
+            .setDuration(300)
+            .start()
 
         binding.heightSeekbar.addOnChangeListener { slider, value, fromUser ->
             if (fromUser && lastVibratedHeight != value.toInt()) {
@@ -84,7 +93,12 @@ class HeightFragment : Fragment() {
     private fun vibrateDevice() {
         val vibrator = requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         if (vibrator.hasVibrator()) {
-            vibrator.vibrate(VibrationEffect.createOneShot(20, 5))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val effect = VibrationEffect.createPredefined(VibrationEffect.EFFECT_HEAVY_CLICK)
+                vibrator.vibrate(effect)
+            } else {
+                vibrator.vibrate(VibrationEffect.createOneShot(20, 5))
+            }
         }
     }
 

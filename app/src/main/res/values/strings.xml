@@ -137,4 +137,13 @@
     <string name="n170_cm">170 cm</string>
     <string name="physical_activity_level">Physical activity level</string>
     <string name="_70_kg">70 kg</string>
+    <string name="lose_weight">Lose Weight</string>
+    <string name="gain_muscle_mass">Gain Muscle Mass</string>
+    <string name="maintain_fitness">Maintain Fitness</string>
+    <string name="choose_goal">Please choose a goal</string>
+    <string name="sedentary">Sedentary</string>
+    <string name="light">Light</string>
+    <string name="moderate">Moderate</string>
+    <string name="active">Active</string>
+    <string name="choose_phys_level">Please choose a physical activity level</string>
 </resources>

@@ -118,4 +118,13 @@
     <string name="n170_cm">170 см</string>
     <string name="physical_activity_level">Рівень фізичної активності</string>
     <string name="_70_kg">70 кг</string>
+    <string name="lose_weight">Схуднути</string>
+    <string name="gain_muscle_mass">Набрати м’язову масу</string>
+    <string name="maintain_fitness">Підтримувати фізичну форму</string>
+    <string name="choose_goal">Будь ласка, виберіть мету</string>
+    <string name="sedentary">Сидячий</string>
+    <string name="light">Легкий</string>
+    <string name="moderate">Помірний</string>
+    <string name="active">Активний</string>
+    <string name="choose_phys_level">Будь ласка, виберіть рівень фізичної активності</string>
 </resources>

@@ -1,10 +1,12 @@
 package com.hrysenko.dailyquest.presentation.login
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.hrysenko.dailyquest.R
 import com.hrysenko.dailyquest.databinding.ActivityLoginBinding
+import com.hrysenko.dailyquest.presentation.main.MainActivity
 import android.animation.ObjectAnimator
 
 class LoginActivity : AppCompatActivity() {
@@ -26,10 +28,21 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+        val prefs = getSharedPreferences("dailyquest_prefs", MODE_PRIVATE)
+        val isRegistered = prefs.getBoolean("is_registered", false)
+
+        if (isRegistered) {
+
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+            return
+        }
+
+
         if (savedInstanceState == null) {
             showFragment(IntroFragment())
         }
-
 
         supportFragmentManager.addOnBackStackChangedListener {
             updateProgressBar()
@@ -38,7 +51,6 @@ class LoginActivity : AppCompatActivity() {
 
     fun showFragment(fragment: Fragment) {
         val fragmentClass = fragment::class.java
-
 
         if (fragmentClass == FinishFragment::class.java) {
             supportFragmentManager.beginTransaction()
@@ -49,15 +61,12 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
-
         currentFragmentIndex = fragmentOrder.indexOf(fragmentClass)
         if (currentFragmentIndex == -1) {
             currentFragmentIndex = fragmentOrder.size - 1
         }
 
-
         updateProgressBar()
-
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
@@ -69,13 +78,11 @@ class LoginActivity : AppCompatActivity() {
         val backStackCount = supportFragmentManager.backStackEntryCount
         val currentFragment = supportFragmentManager.fragments.lastOrNull()
 
-
         if (currentFragment is FinishFragment) {
             currentFragmentIndex = fragmentOrder.size
         } else {
             currentFragmentIndex = (backStackCount - 1).coerceAtLeast(0).coerceAtMost(fragmentOrder.size - 1)
         }
-
 
         ObjectAnimator.ofInt(binding.progressBar, "progress", binding.progressBar.progress, currentFragmentIndex)
             .setDuration(300)

@@ -23,6 +23,13 @@ class IntroFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        binding.root.alpha = 0f
+        binding.root.animate()
+            .alpha(1f)
+            .setDuration(300)
+            .start()
+
         binding.nextButton.setOnClickListener {
             (activity as? LoginActivity)?.showFragment(GenderFragment())
         }

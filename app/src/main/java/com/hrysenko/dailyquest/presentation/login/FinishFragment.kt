@@ -36,6 +36,13 @@ class FinishFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        binding.root.alpha = 0f
+        binding.root.animate()
+            .alpha(1f)
+            .setDuration(300)
+            .start()
+
         binding.backButton.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
