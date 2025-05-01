@@ -50,7 +50,7 @@
     <string name="bmi_overweight_recommendation">Ваш індекс маси тіла дещо перевищує норму. Спробуйте додати більше фізичної активності до свого розпорядку та зверніть увагу на збалансоване харчування. За необхідності проконсультуйтеся з лікарем.</string>
     <string name="bmi_obese_recommendation">Ваш індекс маси тіла вказує на ожиріння. Важливо звернутися до лікаря або медичного фахівця для розробки детального плану, який може включати зміни в харчуванні та збільшення фізичної активності.</string>
     <string name="delete">Видалити</string>
-    <string name="normal_quests">Звичайні квести</string>
+    <string name="normal_quests">Щоденні квести</string>
     <string name="custom_quests">Індивідуальні квести</string>
     <string name="please_complete_all_quests">Будь ласка, заверште всі квести!</string>
     <string name="push_ups">Віджимання</string>
@@ -127,4 +127,8 @@
     <string name="moderate">Помірний</string>
     <string name="active">Активний</string>
     <string name="choose_phys_level">Будь ласка, виберіть рівень фізичної активності</string>
+    <string name="name_too_long">Ім\'я не може перевищувати %d символів</string>
+    <string name="complexity_hint">Складність</string>
+    <string name="notif_on">Сповіщення увімкнені</string>
+    <string name="notif_off">Сповіщення вимкнені</string>
 </resources>

@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import com.hrysenko.dailyquest.R
 import com.hrysenko.dailyquest.databinding.ActivityLoginBinding
 import com.hrysenko.dailyquest.presentation.main.MainActivity
-import android.animation.ObjectAnimator
 
 class LoginActivity : AppCompatActivity() {
 
@@ -28,17 +27,14 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         val prefs = getSharedPreferences("dailyquest_prefs", MODE_PRIVATE)
         val isRegistered = prefs.getBoolean("is_registered", false)
 
         if (isRegistered) {
-
             startActivity(Intent(this, MainActivity::class.java))
             finish()
             return
         }
-
 
         if (savedInstanceState == null) {
             showFragment(IntroFragment())
@@ -84,9 +80,8 @@ class LoginActivity : AppCompatActivity() {
             currentFragmentIndex = (backStackCount - 1).coerceAtLeast(0).coerceAtMost(fragmentOrder.size - 1)
         }
 
-        ObjectAnimator.ofInt(binding.progressBar, "progress", binding.progressBar.progress, currentFragmentIndex)
-            .setDuration(300)
-            .start()
+
+        binding.progressBar.progress = currentFragmentIndex
     }
 
     override fun onBackPressed() {

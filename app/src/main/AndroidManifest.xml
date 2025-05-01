@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -20,7 +23,8 @@
 
         <activity
             android:name=".presentation.login.LoginActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,7 +34,8 @@
         <activity
             android:name=".presentation.main.MainActivity"
             android:exported="true"
-            android:label="Головний екран" />
+            android:label="Головний екран"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
