@@ -1,9 +1,12 @@
 package com.hrysenko.dailyquest.presentation.profile
 
+import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -12,9 +15,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
@@ -32,6 +37,12 @@ class ProfileFragment : Fragment() {
     private val CHANNEL_ID = "dailyquest_channel"
     private val NOTIFICATION_ID = 1
 
+    private val editProfileLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            loadUserData()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,30 +54,38 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         database = Room.databaseBuilder(
             requireContext(),
             AppDatabase::class.java, "dailyquest_db"
         ).build()
 
-
         createNotificationChannel()
-
 
         loadUserData()
 
-
         val sharedPreferences = requireContext().getSharedPreferences("DailyQuestPrefs", Context.MODE_PRIVATE)
-        val isNotificationsEnabled = sharedPreferences.getBoolean("notifications_enabled", false)
+
+        val isNotificationsEnabled = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val hasPermission = ActivityCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+
+            if (hasPermission) {
+                sharedPreferences.edit { putBoolean("notifications_enabled", true) }
+                true
+            } else {
+                sharedPreferences.getBoolean("notifications_enabled", false)
+            }
+        } else {
+            sharedPreferences.getBoolean("notifications_enabled", true)
+        }
+
         binding.switchMaterial.isChecked = isNotificationsEnabled
 
-
         binding.switchMaterial.setOnCheckedChangeListener { _: CompoundButton, isChecked: Boolean ->
-
-            sharedPreferences.edit().putBoolean("notifications_enabled", isChecked).apply()
-
+            sharedPreferences.edit { putBoolean("notifications_enabled", isChecked) }
             if (isChecked) {
-
                 sendTestNotification()
                 Toast.makeText(requireContext(), getString(R.string.notif_on), Toast.LENGTH_SHORT).show()
             } else {
@@ -74,17 +93,34 @@ class ProfileFragment : Fragment() {
             }
         }
 
-
         binding.editButton.setOnClickListener {
-            Toast.makeText(requireContext(), "Edit button clicked", Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireContext(), EditProfileActivity::class.java)
+            editProfileLauncher.launch(intent)
         }
 
-        binding.supportBtn.setOnClickListener {
-            Toast.makeText(requireContext(), "Support button clicked", Toast.LENGTH_SHORT).show()
+        binding.cardSupport.setOnClickListener {
+            // Launch an email intent for support
+            val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:support@dailyquest.com") // Replace with your support email
+                putExtra(Intent.EXTRA_SUBJECT, "Support Request - DailyQuest")
+                putExtra(Intent.EXTRA_TEXT, "Please describe your issue or question:")
+            }
+            try {
+                startActivity(Intent.createChooser(emailIntent, "Send email"))
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "No email app found", Toast.LENGTH_SHORT).show()
+                Log.e("ProfileFragment", "Error launching email intent: ${e.message}")
+            }
         }
 
-        binding.aboutBtn.setOnClickListener {
-            Toast.makeText(requireContext(), "About button clicked", Toast.LENGTH_SHORT).show()
+        binding.cardAbout.setOnClickListener {
+            // Placeholder for About action (e.g., navigate to AboutActivity or show Toast)
+            Toast.makeText(requireContext(), "About DailyQuest: Version 1.0", Toast.LENGTH_SHORT).show()
+            // Example: Navigate to an AboutActivity
+            /*
+            val intent = Intent(requireContext(), AboutActivity::class.java)
+            startActivity(intent)
+            */
         }
     }
 
@@ -96,38 +132,31 @@ class ProfileFragment : Fragment() {
 
                 withContext(Dispatchers.Main) {
                     if (user != null) {
-
                         binding.userNameText.text = user.name
                         binding.userGoalText.text = user.goal
                         binding.textAge.text = user.age.toString()
 
-
                         binding.textHeight.text = formatDimension(user.height, R.string.cm)
                         binding.textWeight.text = formatDimension(user.weight, R.string.kg)
-                    } else {
-                        Toast.makeText(requireContext(), "Дані користувача відсутні", Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (e: Exception) {
                 Log.e("ProfileFragment", "Error loading user data: ${e.message}")
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(requireContext(), "Помилка завантаження даних", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
-
     private fun formatDimension(value: Double?, unitResId: Int): String {
         if (value == null) return ""
-
         return if (value % 1.0 == 0.0) {
             "${value.toInt()} ${getString(unitResId)}"
         } else {
             "$value ${getString(unitResId)}"
         }
     }
-
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -143,16 +172,14 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    //test notification
     private fun sendTestNotification() {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ActivityCompat.checkSelfPermission(
                     requireContext(),
                     android.Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                Toast.makeText(requireContext(), "Дозвіл на сповіщення не надано", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.no_allow), Toast.LENGTH_SHORT).show()
                 return
             }
         }

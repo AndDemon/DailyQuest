@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.hrysenko.dailyquest.R
 import com.hrysenko.dailyquest.models.AppDatabase
 import com.hrysenko.dailyquest.models.quest.room.Quest
@@ -27,13 +28,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collectLatest
 import android.text.InputFilter
 import android.widget.ArrayAdapter
-import com.google.android.material.textfield.MaterialAutoCompleteTextView
 
 class CustomQuestFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var questDao: QuestDao
     private lateinit var addTaskButton: Button
+    private var addQuestDialog: AlertDialog? = null
     private val questAdapter = QuestListAdapter(
         onDeleteClick = { quest -> deleteQuest(quest) },
         onDoneClick = { quest, position -> markQuestAsDone(quest, position) }
@@ -52,34 +53,35 @@ class CustomQuestFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         questDao = AppDatabase.getDatabase(requireContext()).questDao()
-
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = questAdapter
         recyclerView.itemAnimator = DefaultItemAnimator()
 
-
-        viewLifecycleOwner.lifecycleScope.launch {
+        lifecycleScope.launch {
             questDao.getAllQuests().collectLatest { quests ->
                 questAdapter.submitList(quests)
             }
         }
 
-
         addTaskButton.setOnClickListener { openAddQuestDialog() }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        addQuestDialog?.dismiss()
+        addQuestDialog = null
     }
 
     private fun openAddQuestDialog() {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_quest, null)
         val questNameInput: EditText = dialogView.findViewById(R.id.quest_name_input)
-
         val complexityDropdown: MaterialAutoCompleteTextView = dialogView.findViewById(R.id.complexity_dropdown)
         val questAmountInput: EditText = dialogView.findViewById(R.id.quest_amount_input)
         val saveButton: Button = dialogView.findViewById(R.id.save_button)
 
-        // Налаштування випадаючого меню для MaterialAutoCompleteTextView
+        // Setup dropdown for complexity levels
         val complexityLevels = resources.getStringArray(R.array.complexity_levels)
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, complexityLevels)
         complexityDropdown.setAdapter(adapter)
@@ -87,42 +89,43 @@ class CustomQuestFragment : Fragment() {
         questNameInput.filters = arrayOf(InputFilter.LengthFilter(18))
         questAmountInput.filters = arrayOf(InputFilter.LengthFilter(8))
 
-        val dialog = AlertDialog.Builder(requireContext())
+        addQuestDialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .create()
 
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        addQuestDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         saveButton.setOnClickListener {
-            val name = questNameInput.text.toString().trim()
+            if (isAdded && !isDetached) {
+                val name = questNameInput.text.toString().trim()
+                val complexity = complexityDropdown.text.toString()
+                val amount = questAmountInput.text.toString().trim()
 
-            val complexity = complexityDropdown.text.toString()
-            val amount = questAmountInput.text.toString().trim()
-
-            if (name.isNotEmpty() && amount.isNotEmpty()) {
-                val newQuest = Quest(name = name, complexity = complexity, amount = amount, isReady = false)
-                addQuestToDatabase(newQuest)
-                dialog.dismiss()
+                if (name.isNotEmpty() && amount.isNotEmpty()) {
+                    val newQuest = Quest(name = name, complexity = complexity, amount = amount, isReady = false)
+                    addQuestToDatabase(newQuest)
+                    addQuestDialog?.dismiss()
+                }
             }
         }
 
-        dialog.show()
+        addQuestDialog?.show()
     }
 
     private fun addQuestToDatabase(quest: Quest) {
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.IO) {
             questDao.insertQuest(quest)
         }
     }
 
     private fun deleteQuest(quest: Quest) {
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.IO) {
             questDao.deleteQuest(quest)
         }
     }
 
     private fun markQuestAsDone(quest: Quest, position: Int) {
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.IO) {
             quest.isReady = true
             questDao.updateQuest(quest)
 
@@ -161,7 +164,6 @@ class CustomQuestFragment : Fragment() {
                 nameText.text = quest.name
                 complexityText.text = quest.complexity
                 amountText.text = quest.amount
-
 
                 itemView.alpha = if (quest.isReady) 0.5f else 1.0f
                 doneButton.isEnabled = !quest.isReady

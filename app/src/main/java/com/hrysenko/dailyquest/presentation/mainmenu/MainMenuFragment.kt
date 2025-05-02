@@ -1,6 +1,5 @@
 package com.hrysenko.dailyquest.presentation.mainmenu
 
-import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -22,6 +21,7 @@ class MainMenuFragment : Fragment() {
     private var _binding: FragmentMainMenuBinding? = null
     private val binding get() = _binding!!
     private var callback: OnButtonClickListener? = null
+    private var bmiDialog: androidx.appcompat.app.AlertDialog? = null
 
     interface OnButtonClickListener {
         fun onCheckButtonClick()
@@ -49,7 +49,10 @@ class MainMenuFragment : Fragment() {
 
         // Setup click listeners
         binding.viewMore.setOnClickListener { showBMIDialog() }
-        binding.dqCheck.setOnClickListener { callback?.onCheckButtonClick() }
+        binding.dqCheck.setOnClickListener {
+            bmiDialog?.dismiss()
+            callback?.onCheckButtonClick()
+        }
 
         // Load user data
         loadUserData()
@@ -63,11 +66,22 @@ class MainMenuFragment : Fragment() {
                 withContext(Dispatchers.Main) {
                     if (user != null) {
                         binding.userNameText.text = user.name
-                        val heightInMeters = user.height.toDouble() / 100.0
-                        val weight = user.weight.toDouble()
-                        val bmi = weight / (heightInMeters * heightInMeters)
-                        binding.bmiNum.text = String.format("%.1f", bmi)
-                        binding.bmiWeight.text = getBMICategory(bmi)
+
+                        val height = user.height
+                        val weight = user.weight
+
+                        if (height != null && weight != null) {
+                            val heightInMeters = height / 100.0
+                            val bmi = weight / (heightInMeters * heightInMeters)
+                            binding.bmiNum.text = String.format("%.1f", bmi)
+                            binding.bmiWeight.text = getBMICategory(bmi)
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                "Некоректні дані користувача",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     } else {
                         Toast.makeText(
                             requireContext(),
@@ -99,11 +113,14 @@ class MainMenuFragment : Fragment() {
     private fun showBMIDialog() {
         val bmiRecommendation = getBMIRecommendation()
 
-        MaterialAlertDialogBuilder(requireContext())
+        bmiDialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.bmi_recommendations)
             .setMessage(bmiRecommendation)
             .setPositiveButton(android.R.string.ok) { dialog, _ -> dialog.dismiss() }
-            .show()
+            .setCancelable(true)
+            .create()
+
+        bmiDialog?.show()
     }
 
     private fun getBMIRecommendation(): String {
@@ -133,6 +150,8 @@ class MainMenuFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        bmiDialog?.dismiss()
+        bmiDialog = null
         super.onDestroyView()
         _binding = null
     }

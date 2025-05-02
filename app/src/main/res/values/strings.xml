@@ -146,9 +146,21 @@
     <string name="moderate">Moderate</string>
     <string name="active">Active</string>
     <string name="choose_phys_level">Please choose a physical activity level</string>
-    <string name="name_too_long">Name cannot exceed %d characters</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="complexity_hint">Complexity</string>
     <string name="notification">Notification</string>
+    <string name="notif_on">Notifications enabled</string>
+    <string name="notif_off">Notifications disabled</string>
+    <string name="your_gender">Your Gender</string>
+    <string name="your_activity_level">Your Activity Level</string>
+    <string name="profile_updated_successfully">Profile updated successfully</string>
+    <string name="please_fill_all_required_fields">Please fill all required fields</string>
+    <string name="name_too_long">Name must be 12 characters or less</string>
+    <string name="invalid_age">Age must be between 10 and 100</string>
+    <string name="invalid_height">Height must be between 100 and 250 cm</string>
+    <string name="invalid_weight">Weight must be between 30 and 200 kg</string>
+    <string name="no_allow">The permission for notifications has not been granted.</string>
+    <string name="level_up_your_life_with_dailyquest">Level Up Your Life with</string>
+    <string name="about_description">Learn more about the app</string>
+    <string name="contact_our_support">Contact our support</string>
 </resources>

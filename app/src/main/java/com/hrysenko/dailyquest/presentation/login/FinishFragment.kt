@@ -1,5 +1,6 @@
 package com.hrysenko.dailyquest.presentation.login
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -27,7 +28,7 @@ class FinishFragment : Fragment() {
     private var _binding: FragmentFinishBinding? = null
     private val binding get() = _binding!!
     private val viewModel: LoginViewModel by activityViewModels()
-    private val maxNameLength = 20
+    private val maxNameLength = 12
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +38,7 @@ class FinishFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("StringFormatInvalid")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -55,7 +57,6 @@ class FinishFragment : Fragment() {
             vibrateDevice()
             val name = binding.loginName.text.toString().trim()
 
-
             if (name.isEmpty()) {
                 Toast.makeText(
                     requireContext(),
@@ -64,7 +65,6 @@ class FinishFragment : Fragment() {
                 ).show()
                 return@setOnClickListener
             }
-
 
             if (name.length > maxNameLength) {
                 Toast.makeText(

@@ -127,8 +127,19 @@
     <string name="moderate">Помірний</string>
     <string name="active">Активний</string>
     <string name="choose_phys_level">Будь ласка, виберіть рівень фізичної активності</string>
-    <string name="name_too_long">Ім\'я не може перевищувати %d символів</string>
     <string name="complexity_hint">Складність</string>
     <string name="notif_on">Сповіщення увімкнені</string>
     <string name="notif_off">Сповіщення вимкнені</string>
+    <string name="notification">Сповіщення</string>
+    <string name="your_gender">Ваша стать</string>
+    <string name="your_activity_level">Ваш рівень активності</string>
+    <string name="profile_updated_successfully">Профіль успішно оновлено</string>
+    <string name="please_fill_all_required_fields">Будь ласка, заповніть усі обов’язкові поля</string>
+    <string name="name_too_long">Ім\'я не може перевищувати 12 символів</string>
+    <string name="invalid_age">Вік має бути від 10 до 100 років</string>
+    <string name="invalid_height">Зріст має бути від 100 до 250 см</string>
+    <string name="invalid_weight">Вага має бути від 30 до 200 кг</string>
+    <string name="no_allow">Дозвіл на сповіщення не надано</string>
+    <string name="about_description">Дізнайтесь більше про застосунок</string>
+    <string name="contact_our_support">Зверніться до служби підтримки</string>
 </resources>

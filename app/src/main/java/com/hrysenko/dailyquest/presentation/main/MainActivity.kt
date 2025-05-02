@@ -1,12 +1,17 @@
 package com.hrysenko.dailyquest.presentation.main
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.hrysenko.dailyquest.R
 import com.hrysenko.dailyquest.databinding.ActivityMainBinding
@@ -42,11 +47,31 @@ class MainActivity : AppCompatActivity(), MainMenuFragment.OnButtonClickListener
         }
     }
 
+    private val REQUEST_NOTIFICATION_PERMISSION = 1001
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    REQUEST_NOTIFICATION_PERMISSION
+                )
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        requestNotificationPermission()
 
         database = AppDatabase.getDatabase(this)
         appDatabase = database
@@ -91,7 +116,6 @@ class MainActivity : AppCompatActivity(), MainMenuFragment.OnButtonClickListener
             .commit()
     }
 
-
     override fun onDestroy() {
         super.onDestroy()
         sharedWebView?.destroy()
@@ -101,5 +125,20 @@ class MainActivity : AppCompatActivity(), MainMenuFragment.OnButtonClickListener
     override fun onCheckButtonClick() {
         loadFragment(QuestsFragment())
         binding.bottomNavigation.selectedItemId = R.id.dailyQuest
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_NOTIFICATION_PERMISSION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            } else {
+
+            }
+        }
     }
 }
