@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
@@ -28,23 +29,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/name_input_layout"
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="back_button, finish_label"/>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/login_name"
+        style="@style/Widget.App.TextInputEditText.EnterName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:endIconMode="clear_text"
-        app:layout_constraintTop_toBottomOf="@id/finish_label"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/login_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/your_name"
-            android:inputType="text"
-            android:maxLength="20" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:hint="@string/your_name"
+        android:inputType="text"
+        android:maxLength="20"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toTopOf="@id/finish_button"
+        app:layout_constraintTop_toBottomOf="@id/barrier"
+        app:layout_constraintVertical_bias="0.65" />
 
     <Button
         android:id="@+id/finish_button"

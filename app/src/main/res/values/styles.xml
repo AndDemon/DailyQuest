@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.App.TextInputEditText.EnterName" parent="Widget.Material3.TextInputEditText.OutlinedBox">
+        <item name="android:gravity">center_horizontal</item>
+        <item name="boxStrokeWidth">0dp</item>
+    </style>
+
+</resources>
