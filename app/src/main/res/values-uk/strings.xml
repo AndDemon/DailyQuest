@@ -179,4 +179,9 @@
     <string name="steps_progress">Кроки: %d/%d</string>
     <string name="quest_completed">Завдання виконано!</string>
     <string name="day_streak_0">Серія днів: 0</string>
+
+    <string name="quest_high_knees">Підйом колін</string>
+    <string name="quest_bicycle_crunches">Вправа "Велосипед"</string>
+    <string name="quest_lunges">Кроки з випадом</string>
+    <string name="quest_sit_ups">Скручування на прес</string>
 </resources>

@@ -195,4 +195,11 @@
     <string name="daily_quests_reminder">Daily Quests Reminder</string>
     <string name="uncompleted_quests">You have uncompleted quests for today!</string>
     <string name="day_streak_0">Day streak: 0</string>
+
+    <string name="quest_high_knees">High Knees</string>
+    <string name="quest_bicycle_crunches">Bicycle Crunches</string>
+    <string name="quest_lunges">Lunges</string>
+    <string name="quest_sit_ups">Sit-ups</string>
+
+
 </resources>
