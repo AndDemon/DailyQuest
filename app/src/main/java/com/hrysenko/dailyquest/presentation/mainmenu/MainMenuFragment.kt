@@ -1,18 +1,26 @@
 package com.hrysenko.dailyquest.presentation.mainmenu
 
+import android.Manifest
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.hrysenko.dailyquest.R
 import com.hrysenko.dailyquest.databinding.FragmentMainMenuBinding
 import com.hrysenko.dailyquest.presentation.main.MainActivity
+import com.hrysenko.dailyquest.services.PedometerService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -22,6 +30,7 @@ class MainMenuFragment : Fragment() {
     private val binding get() = _binding!!
     private var callback: OnButtonClickListener? = null
     private var bmiDialog: androidx.appcompat.app.AlertDialog? = null
+    private lateinit var stepsReceiver: BroadcastReceiver
 
     interface OnButtonClickListener {
         fun onCheckButtonClick()
@@ -47,25 +56,63 @@ class MainMenuFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Setup click listeners
         binding.viewMore.setOnClickListener { showBMIDialog() }
         binding.dqCheck.setOnClickListener {
             bmiDialog?.dismiss()
             callback?.onCheckButtonClick()
         }
 
-        // Load user data
         loadUserData()
+        if (checkActivityRecognitionPermission()) {
+            loadSteps()
+            setupStepsReceiver()
+        } else {
+            binding.stepsCount.text = "N/A"
+        }
+    }
+
+    private fun checkActivityRecognitionPermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACTIVITY_RECOGNITION
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
+        }
+    }
+
+    private fun setupStepsReceiver() {
+        stepsReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                val steps = intent?.getIntExtra(PedometerService.EXTRA_STEPS, 0) ?: 0
+                binding.stepsCount.text = steps.toString()
+            }
+        }
+        val filter = IntentFilter(PedometerService.STEP_UPDATE_ACTION)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requireContext().registerReceiver(stepsReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+        } else {
+            ContextCompat.registerReceiver(
+                requireContext(),
+                stepsReceiver,
+                filter,
+                ContextCompat.RECEIVER_NOT_EXPORTED
+            )
+        }
     }
 
     private fun loadUserData() {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val user = MainActivity.appDatabase.userDao().getUser()
-                Log.d("MainMenuFragment", "User from DB: $user")
+                val preferences = requireContext().getSharedPreferences("DailyQuestPrefs", Context.MODE_PRIVATE)
+                val streak = preferences.getInt("streak", 0)
+                Log.d("MainMenuFragment", "User from DB: $user, Streak: $streak")
                 withContext(Dispatchers.Main) {
                     if (user != null) {
                         binding.userNameText.text = user.name
+                        binding.streakCount.text = streak.toString()
 
                         val height = user.height
                         val weight = user.weight
@@ -83,6 +130,7 @@ class MainMenuFragment : Fragment() {
                             ).show()
                         }
                     } else {
+                        binding.streakCount.text = "0"
                         Toast.makeText(
                             requireContext(),
                             "Дані користувача відсутні",
@@ -93,6 +141,7 @@ class MainMenuFragment : Fragment() {
             } catch (e: Exception) {
                 Log.e("MainMenuFragment", "Error loading user data: ${e.message}")
                 withContext(Dispatchers.Main) {
+                    binding.streakCount.text = "0"
                     Toast.makeText(
                         requireContext(),
                         "Помилка завантаження даних",
@@ -101,6 +150,10 @@ class MainMenuFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun loadSteps() {
+        binding.stepsCount.text = PedometerService.getCurrentSteps().toString()
     }
 
     private fun getBMICategory(bmi: Double): String = when {
@@ -152,6 +205,9 @@ class MainMenuFragment : Fragment() {
     override fun onDestroyView() {
         bmiDialog?.dismiss()
         bmiDialog = null
+        if (::stepsReceiver.isInitialized) {
+            requireContext().unregisterReceiver(stepsReceiver)
+        }
         super.onDestroyView()
         _binding = null
     }

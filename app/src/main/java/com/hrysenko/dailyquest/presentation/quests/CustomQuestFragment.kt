@@ -81,7 +81,7 @@ class CustomQuestFragment : Fragment() {
         val questAmountInput: EditText = dialogView.findViewById(R.id.quest_amount_input)
         val saveButton: Button = dialogView.findViewById(R.id.save_button)
 
-        // Setup dropdown for complexity levels
+
         val complexityLevels = resources.getStringArray(R.array.complexity_levels)
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, complexityLevels)
         complexityDropdown.setAdapter(adapter)

@@ -2,6 +2,7 @@ package com.hrysenko.dailyquest.presentation.main
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -20,6 +21,7 @@ import com.hrysenko.dailyquest.presentation.assistant.AssistantFragment
 import com.hrysenko.dailyquest.presentation.mainmenu.MainMenuFragment
 import com.hrysenko.dailyquest.presentation.profile.ProfileFragment
 import com.hrysenko.dailyquest.presentation.quests.QuestsFragment
+import com.hrysenko.dailyquest.services.PedometerService
 
 class MainActivity : AppCompatActivity(), MainMenuFragment.OnButtonClickListener {
     private lateinit var binding: ActivityMainBinding
@@ -45,9 +47,37 @@ class MainActivity : AppCompatActivity(), MainMenuFragment.OnButtonClickListener
             }
             return sharedWebView!!
         }
+
+        private const val REQUEST_NOTIFICATION_PERMISSION = 1001
+        private const val REQUEST_ACTIVITY_RECOGNITION_PERMISSION = 1002
     }
 
-    private val REQUEST_NOTIFICATION_PERMISSION = 1001
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        requestNotificationPermission()
+        requestActivityRecognitionPermission()
+
+        database = AppDatabase.getDatabase(this)
+        appDatabase = database
+
+        getSharedWebView(this)
+
+        setupBottomNavigation()
+
+        if (savedInstanceState == null) {
+            loadFragment(MainMenuFragment())
+            binding.bottomNavigation.selectedItemId = R.id.main
+        }
+
+
+        if (checkActivityRecognitionPermission()) {
+            startService(Intent(this, PedometerService::class.java))
+        }
+    }
 
     private fun requestNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -65,24 +95,30 @@ class MainActivity : AppCompatActivity(), MainMenuFragment.OnButtonClickListener
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    private fun requestActivityRecognitionPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACTIVITY_RECOGNITION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
+                    REQUEST_ACTIVITY_RECOGNITION_PERMISSION
+                )
+            }
+        }
+    }
 
-        requestNotificationPermission()
-
-        database = AppDatabase.getDatabase(this)
-        appDatabase = database
-
-        getSharedWebView(this)
-
-        setupBottomNavigation()
-
-        if (savedInstanceState == null) {
-            loadFragment(MainMenuFragment())
-            binding.bottomNavigation.selectedItemId = R.id.main
+    private fun checkActivityRecognitionPermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACTIVITY_RECOGNITION
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
         }
     }
 
@@ -133,11 +169,16 @@ class MainActivity : AppCompatActivity(), MainMenuFragment.OnButtonClickListener
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_NOTIFICATION_PERMISSION) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        when (requestCode) {
+            REQUEST_NOTIFICATION_PERMISSION -> {
 
-            } else {
+            }
+            REQUEST_ACTIVITY_RECOGNITION_PERMISSION -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startService(Intent(this, PedometerService::class.java))
+                } else {
 
+                }
             }
         }
     }

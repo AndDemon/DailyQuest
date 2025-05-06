@@ -54,7 +54,8 @@
                 android:id="@+id/male_icon"
                 android:layout_width="@dimen/_130sdp"
                 android:layout_height="@dimen/_130sdp"
-                android:src="@drawable/ic_male" />
+                android:src="@drawable/ic_male"
+                app:tint="?attr/colorOnSurface"/>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -92,7 +93,8 @@
                 android:id="@+id/female_icon"
                 android:layout_width="@dimen/_130sdp"
                 android:layout_height="@dimen/_130sdp"
-                android:src="@drawable/ic_female" />
+                android:src="@drawable/ic_female"
+                app:tint="?attr/colorOnSurface"/>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
