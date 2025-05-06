@@ -40,7 +40,7 @@
     <string name="login_successful">Successful!</string>
     <string name="done">Done</string>
     <string name="add_new_quest">Add New Quest</string>
-    <string name="day_streak">"Day Streak: "</string>
+    <string name="day_streak">Day Streak: %d</string>
     <string name="ok">Ok</string>
     <string name="cancelb">Cancel</string>
     <string name="welcome_back">Welcome Back,</string>
@@ -96,15 +96,16 @@
     </string-array>
 
     <string-array name="goal_options">
-        <item>Lose weight</item>
-        <item>Gain muscle mass</item>
-        <item>Maintain fitness</item>
+        <item>Lose Weight</item>
+        <item>Gain Muscle Mass</item>
+        <item>Maintain Fitness</item>
     </string-array>
 
     <string-array name="phys_level_options">
-        <item>Beginner</item>
-        <item>Intermediate</item>
-        <item>Advanced</item>
+        <item>Sedentary</item>
+        <item>Light</item>
+        <item>Moderate</item>
+        <item>Active</item>
     </string-array>
 
     <string-array name="complexity_levels">
@@ -146,7 +147,7 @@
     <string name="moderate">Moderate</string>
     <string name="active">Active</string>
     <string name="choose_phys_level">Please choose a physical activity level</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="complexity_hint">Complexity</string>
     <string name="notification">Notification</string>
     <string name="notif_on">Notifications enabled</string>
@@ -160,7 +161,38 @@
     <string name="invalid_height">Height must be between 100 and 250 cm</string>
     <string name="invalid_weight">Weight must be between 30 and 200 kg</string>
     <string name="no_allow">The permission for notifications has not been granted.</string>
-    <string name="level_up_your_life_with_dailyquest">Level Up Your Life with</string>
     <string name="about_description">Learn more about the app</string>
     <string name="contact_our_support">Contact our support</string>
+    <string name="steps">Steps</string>
+    <string name="days">Days</string>
+    <string name="steps_not_reached">Need %d more steps to complete quests</string>
+    <string name="all_quests_completed">All quests completed!</string>
+    <string name="steps_progress">Steps: %d/%d</string>
+    <string name="quest_completed">Quest completed!</string>
+    <string name="steps_amount">%d steps</string>
+
+
+    <!-- Quest Names -->
+    <string name="quest_walk">Walk</string>
+    <string name="quest_jumping_jacks">Jumping Jacks</string>
+    <string name="quest_push_ups">Push-ups</string>
+    <string name="quest_squats">Squats</string>
+    <string name="quest_plank">Plank</string>
+    <string name="quest_stretch">Stretch</string>
+
+    <!-- Complexity Levels -->
+    <string name="complexity_easy">Easy</string>
+    <string name="complexity_moderate">Moderate</string>
+    <string name="complexity_hard">Hard</string>
+
+    <!-- Quest Status -->
+    <string name="completed">Completed</string>
+    <string name="in_progress">In Progress</string>
+    <string name="undo">Undo</string>
+
+    <!-- Notification Strings -->
+    <string name="quest_reminders">Quest Reminders</string>
+    <string name="daily_quests_reminder">Daily Quests Reminder</string>
+    <string name="uncompleted_quests">You have uncompleted quests for today!</string>
+    <string name="day_streak_0">Day streak: 0</string>
 </resources>

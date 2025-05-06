@@ -3,4 +3,5 @@
     <style name="Base.Theme.DailyQuest" parent="Theme.Material3.DynamicColors.Dark.NoActionBar">
 
     </style>
+    <color name="logo_tint">#FFFFFF</color>
 </resources>

@@ -41,7 +41,7 @@
     <string name="you_have_a_normal_weight">Ви маєте нормальну вагу</string>
     <string name="you_are_overweight">Ви маєте надмірну вагу</string>
     <string name="you_are_obese">Ви страждаєте на ожиріння</string>
-    <string name="check">Перевірити</string>
+    <string name="check">Відкрити</string>
     <string name="today_quest">Сьогоднішній квест</string>
     <string name="bmi_recommendations">Рекомендації за індексом маси тіла (BMI)</string>
     <string name="bmi_info">Ваш індекс маси тіла (BMI): %.1f.\n%s</string>
@@ -75,9 +75,16 @@
     </string-array>
 
     <string-array name="phys_level_options">
-        <item>Початківець</item>
+        <item>Сидячий</item>
+        <item>Легкий</item>
+        <item>Помірний</item>
+        <item>Активний</item>
+    </string-array>
+
+    <string-array name="complexity_levels">
+        <item>Легкий</item>
         <item>Середній</item>
-        <item>Просунутий</item>
+        <item>Важкий</item>
     </string-array>
     <string name="confirm_all_quests">Підтвердити всі квести</string>
     <string name="save">Зберегти</string>
@@ -142,4 +149,34 @@
     <string name="no_allow">Дозвіл на сповіщення не надано</string>
     <string name="about_description">Дізнайтесь більше про застосунок</string>
     <string name="contact_our_support">Зверніться до служби підтримки</string>
+    <string name="steps">Кроки</string>
+    <string name="days">Дні</string>
+
+    <!-- Quest Names -->
+    <string name="steps_amount">%d кроків</string>
+    <string name="quest_walk">Ходьба</string>
+    <string name="quest_jumping_jacks">Стрибки з розведенням рук і ніг</string>
+    <string name="quest_push_ups">Віджимання</string>
+    <string name="quest_squats">Присідання</string>
+    <string name="quest_plank">Планка</string>
+    <string name="quest_stretch">Розтяжка</string>
+
+    <!-- Complexity Levels -->
+    <string name="complexity_easy">Легкий</string>
+    <string name="complexity_moderate">Середній</string>
+    <string name="complexity_hard">Важкий</string>
+
+    <!-- Quest Status -->
+    <string name="completed">Завершено</string>
+    <string name="in_progress">В процесі</string>
+    <string name="undo">Скасувати</string>
+
+    <!-- Notification Strings -->
+    <string name="quest_reminders">Нагадування про квести</string>
+    <string name="daily_quests_reminder">Нагадування про щоденні квести</string>
+    <string name="uncompleted_quests">У вас є незавершені квести на сьогодні!</string>
+    <string name="all_quests_completed">Усі завдання виконано!</string>
+    <string name="steps_progress">Кроки: %d/%d</string>
+    <string name="quest_completed">Завдання виконано!</string>
+    <string name="day_streak_0">Серія днів: 0</string>
 </resources>

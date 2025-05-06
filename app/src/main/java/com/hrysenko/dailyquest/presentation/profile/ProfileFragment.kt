@@ -83,6 +83,12 @@ class ProfileFragment : Fragment() {
 
         binding.switchMaterial.isChecked = isNotificationsEnabled
 
+
+        binding.materialCardView2.setOnClickListener {
+
+            binding.switchMaterial.isChecked = !binding.switchMaterial.isChecked
+        }
+
         binding.switchMaterial.setOnCheckedChangeListener { _: CompoundButton, isChecked: Boolean ->
             sharedPreferences.edit { putBoolean("notifications_enabled", isChecked) }
             if (isChecked) {
@@ -99,9 +105,8 @@ class ProfileFragment : Fragment() {
         }
 
         binding.cardSupport.setOnClickListener {
-            // Launch an email intent for support
             val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
-                data = Uri.parse("mailto:support@dailyquest.com") // Replace with your support email
+                data = Uri.parse("mailto:support@dailyquest.com")
                 putExtra(Intent.EXTRA_SUBJECT, "Support Request - DailyQuest")
                 putExtra(Intent.EXTRA_TEXT, "Please describe your issue or question:")
             }
@@ -114,13 +119,14 @@ class ProfileFragment : Fragment() {
         }
 
         binding.cardAbout.setOnClickListener {
-            // Placeholder for About action (e.g., navigate to AboutActivity or show Toast)
-            Toast.makeText(requireContext(), "About DailyQuest: Version 1.0", Toast.LENGTH_SHORT).show()
-            // Example: Navigate to an AboutActivity
-            /*
-            val intent = Intent(requireContext(), AboutActivity::class.java)
-            startActivity(intent)
-            */
+            val url = "https://github.com/AndDemon/DailyQuest"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            try {
+                startActivity(intent)
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Unable to open link", Toast.LENGTH_SHORT).show()
+                Log.e("ProfileFragment", "Error opening GitHub link: ${e.message}")
+            }
         }
     }
 
@@ -182,16 +188,6 @@ class ProfileFragment : Fragment() {
                 Toast.makeText(requireContext(), getString(R.string.no_allow), Toast.LENGTH_SHORT).show()
                 return
             }
-        }
-
-        val builder = NotificationCompat.Builder(requireContext(), CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle(getString(R.string.app_name))
-            .setContentText("Це тестове сповіщення від DailyQuest!")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-
-        with(NotificationManagerCompat.from(requireContext())) {
-            notify(NOTIFICATION_ID, builder.build())
         }
     }
 
