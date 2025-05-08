@@ -17,7 +17,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="8dp"
             android:text="@string/welcome_back"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,11 +25,10 @@
             android:id="@+id/user_name_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="30dp"
             android:layout_marginStart="12dp"/>
 
         <com.google.android.material.card.MaterialCardView
@@ -47,7 +46,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="22sp"
-                android:textStyle="bold"
                 android:text="@string/bmi_body_mass_index"
                 android:layout_marginHorizontal="15dp"
                 android:layout_marginTop="20dp"/>
@@ -56,9 +54,9 @@
                 android:id="@+id/bmi_weight"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="19sp"
+                android:textSize="16sp"
                 android:layout_marginHorizontal="15dp"
-                android:layout_marginTop="46dp" />
+                android:layout_marginTop="51dp" />
 
             <TextView
                 android:id="@+id/bmi_num"
@@ -95,11 +93,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-
                 <ImageView
                     android:id="@+id/foot_logo"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/foot"
                     app:tint="@color/logo_tint"
@@ -107,25 +104,23 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
-
                 <TextView
                     android:id="@+id/steps_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/steps"
-                    android:textSize="20sp"
+                    android:textSize="19sp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
-
                 <TextView
                     android:id="@+id/steps_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:textSize="25sp"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
@@ -133,7 +128,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>
-
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/streak_card"
@@ -152,11 +146,63 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-
                 <ImageView
                     android:id="@+id/fire_logo"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="8dp"
+                    android:src="@drawable/winner"
+                    app:tint="@color/logo_tint"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/days_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/days"
+                    android:textSize="19sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/streak_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/calories_card"
+            style="@style/bymam_elev"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginVertical="15dp"
+            app:layout_constraintEnd_toStartOf="@id/progress_card"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/steps_card"
+            app:cardElevation="6dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/calories_logo"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/flame"
                     app:tint="@color/logo_tint"
@@ -164,29 +210,83 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
-
                 <TextView
-                    android:id="@+id/days_text"
+                    android:id="@+id/calories_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/days"
-                    android:textSize="20sp"
+                    android:text="@string/calories"
+                    android:textSize="19sp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
-
                 <TextView
-                    android:id="@+id/streak_count"
+                    android:id="@+id/calories_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:textSize="25sp"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/progress_card"
+            style="@style/bymam_elev"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginVertical="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/calories_card"
+            app:layout_constraintTop_toBottomOf="@id/streak_card"
+            app:cardElevation="6dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/daily_progress_bar"
+                    android:layout_width="68dp"
+                    android:layout_height="68dp"
+                    android:max="100"
+                    app:indicatorColor="?attr/colorPrimary"
+                    app:indicatorSize="70dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:text="0"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/progress_text"
+                    app:trackColor="?attr/colorSurfaceContainer"
+                    app:trackThickness="6dp"
+                    android:layout_marginBottom="4dp"/>
+
+                <TextView
+                    android:id="@+id/progress_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    app:layout_constraintTop_toTopOf="@id/daily_progress_bar"
+                    app:layout_constraintBottom_toBottomOf="@id/daily_progress_bar"
+                    app:layout_constraintStart_toStartOf="@id/daily_progress_bar"
+                    app:layout_constraintEnd_toEndOf="@id/daily_progress_bar" />
+
+                <TextView
+                    android:id="@+id/progress_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/daily_progress"
+                    android:textSize="19sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -201,7 +301,7 @@
             android:layout_marginVertical="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/streak_card">
+            app:layout_constraintTop_toBottomOf="@id/progress_card">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -209,8 +309,7 @@
                 android:layout_marginVertical="18dp"
                 android:layout_marginStart="15dp"
                 android:text="@string/today_quest"
-                android:textSize="22sp"
-                android:textStyle="bold" />
+                android:textSize="22sp" />
 
             <Button
                 app:icon="@drawable/check_ico"

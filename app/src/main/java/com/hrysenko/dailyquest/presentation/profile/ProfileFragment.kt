@@ -37,6 +37,18 @@ class ProfileFragment : Fragment() {
     private val CHANNEL_ID = "dailyquest_channel"
     private val NOTIFICATION_ID = 1
 
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            val sharedPreferences = requireContext().getSharedPreferences("DailyQuestPrefs", Context.MODE_PRIVATE)
+            sharedPreferences.edit { putBoolean("notifications_enabled", true) }
+            binding.switchMaterial.isChecked = true
+
+        } else {
+            Toast.makeText(requireContext(), getString(R.string.no_allow), Toast.LENGTH_SHORT).show()
+            binding.switchMaterial.isChecked = false
+        }
+    }
+
     private val editProfileLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             loadUserData()
@@ -83,16 +95,23 @@ class ProfileFragment : Fragment() {
 
         binding.switchMaterial.isChecked = isNotificationsEnabled
 
-
         binding.materialCardView2.setOnClickListener {
-
             binding.switchMaterial.isChecked = !binding.switchMaterial.isChecked
         }
 
         binding.switchMaterial.setOnCheckedChangeListener { _: CompoundButton, isChecked: Boolean ->
+            if (isChecked && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (ActivityCompat.checkSelfPermission(
+                        requireContext(),
+                        android.Manifest.permission.POST_NOTIFICATIONS
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                    return@setOnCheckedChangeListener
+                }
+            }
             sharedPreferences.edit { putBoolean("notifications_enabled", isChecked) }
             if (isChecked) {
-                sendTestNotification()
                 Toast.makeText(requireContext(), getString(R.string.notif_on), Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(requireContext(), getString(R.string.notif_off), Toast.LENGTH_SHORT).show()
@@ -141,7 +160,6 @@ class ProfileFragment : Fragment() {
                         binding.userNameText.text = user.name
                         binding.userGoalText.text = user.goal
                         binding.textAge.text = user.age.toString()
-
                         binding.textHeight.text = formatDimension(user.height, R.string.cm)
                         binding.textWeight.text = formatDimension(user.weight, R.string.kg)
                     }
@@ -178,18 +196,6 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun sendTestNotification() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ActivityCompat.checkSelfPermission(
-                    requireContext(),
-                    android.Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                Toast.makeText(requireContext(), getString(R.string.no_allow), Toast.LENGTH_SHORT).show()
-                return
-            }
-        }
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

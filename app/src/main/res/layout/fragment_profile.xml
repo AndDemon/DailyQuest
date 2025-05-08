@@ -26,7 +26,6 @@
                 android:gravity="center_horizontal"
                 android:text="@string/profile"
                 android:textSize="20sp"
-                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -35,8 +34,7 @@
                 android:id="@+id/user_name_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="30sp"
-                android:textStyle="bold"
+                android:textSize="28sp"
                 android:layout_marginTop="50dp"
                 android:layout_marginStart="30dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +44,7 @@
                 android:id="@+id/user_goal_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:layout_marginStart="30dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/user_name_text" />
@@ -90,15 +88,14 @@
                         android:id="@+id/text_height"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="21sp" />
+                        android:textSize="20sp" />
 
                     <TextView
                         android:id="@+id/textView2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/height"
-                        android:textStyle="bold"
-                        android:textSize="21sp" />
+                        android:textSize="19sp" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -129,14 +126,13 @@
                         android:id="@+id/text_weight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="21sp" />
+                        android:textSize="20sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/weight"
-                        android:textStyle="bold"
-                        android:textSize="21sp" />
+                        android:textSize="19sp" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -167,15 +163,14 @@
                         android:id="@+id/text_age"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="21sp" />
+                        android:textSize="20sp" />
 
                     <TextView
                         android:id="@+id/textView3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/age"
-                        android:textStyle="bold"
-                        android:textSize="21sp" />
+                        android:textSize="19sp" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -213,7 +208,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/notification"
-                        android:textSize="20sp"
+                        android:textSize="19sp"
                         android:textStyle="normal" />
 
                     <com.google.android.material.materialswitch.MaterialSwitch
@@ -266,7 +261,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/support"
-                            android:textSize="20sp"
+                            android:textSize="19sp"
                             android:textStyle="normal" />
 
                         <TextView
@@ -323,7 +318,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/about"
-                            android:textSize="20sp"
+                            android:textSize="19sp"
                             android:textStyle="normal" />
 
                         <TextView

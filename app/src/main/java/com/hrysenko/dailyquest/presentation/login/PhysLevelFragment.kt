@@ -22,6 +22,7 @@ class PhysLevelFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: LoginViewModel by activityViewModels()
     private var selectedPhysLevel: String? = null
+    private var selectedTrainingLocation: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +45,12 @@ class PhysLevelFragment : Fragment() {
             vibrateDevice()
             requireActivity().supportFragmentManager.popBackStack()
         }
+
+        // Enable cards by default since home is pre-selected
+        binding.sedentaryCard.isEnabled = true
+        binding.lightCard.isEnabled = true
+        binding.moderateCard.isEnabled = true
+        binding.activeCard.isEnabled = true
 
         binding.sedentaryCard.setOnClickListener {
             vibrateDevice()
@@ -81,6 +88,45 @@ class PhysLevelFragment : Fragment() {
             )
         }
 
+        // Setup training location RadioGroup
+        binding.trainingLocationGroup.setOnCheckedChangeListener { _, checkedId ->
+            vibrateDevice()
+            selectedTrainingLocation = when (checkedId) {
+                R.id.gym_radio -> getString(R.string.gym)
+                R.id.home_radio -> getString(R.string.home)
+                else -> null
+            }
+            // Enable cards based on training location selection
+            binding.sedentaryCard.isEnabled = selectedTrainingLocation != null
+            binding.lightCard.isEnabled = selectedTrainingLocation != null
+            binding.moderateCard.isEnabled = selectedTrainingLocation != null
+            binding.activeCard.isEnabled = selectedTrainingLocation != null
+        }
+
+        // Set default selection to home
+        binding.homeRadio.isChecked = true
+        selectedTrainingLocation = getString(R.string.home)
+
+        // Load saved training location, if any, overriding default
+        viewModel.trainingLocation?.let {
+            when (it) {
+                getString(R.string.gym), "Спортзал" -> {
+                    binding.gymRadio.isChecked = true
+                    selectedTrainingLocation = it
+                }
+                getString(R.string.home), "Дім" -> {
+                    binding.homeRadio.isChecked = true
+                    selectedTrainingLocation = it
+                }
+            }
+        }
+
+        // Ensure cards are enabled since training location is pre-selected
+        binding.sedentaryCard.isEnabled = true
+        binding.lightCard.isEnabled = true
+        binding.moderateCard.isEnabled = true
+        binding.activeCard.isEnabled = true
+
         binding.nextButton.setOnClickListener {
             vibrateDevice()
             if (selectedPhysLevel == null) {
@@ -91,7 +137,16 @@ class PhysLevelFragment : Fragment() {
                 ).show()
                 return@setOnClickListener
             }
+            if (selectedTrainingLocation == null) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.choose_training_location),
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
+            }
             viewModel.physLevel = selectedPhysLevel!!
+            viewModel.trainingLocation = selectedTrainingLocation!!
             (activity as? LoginActivity)?.showFragment(FinishFragment())
         }
     }

@@ -25,7 +25,8 @@ object QuestGenerator {
             weight = 70.0,
             sex = "male",
             goal = "maintain fitness",
-            physLevel = "moderate"
+            physLevel = "moderate",
+            trainingLocation = "home"
         )
         val selectedUser = user ?: defaultUser
 
@@ -50,6 +51,9 @@ object QuestGenerator {
             bmi > 30 -> 0.7
             else -> 1.0
         }
+
+        val isGym = selectedUser.trainingLocation == "gym"
+        val trainingLocation = selectedUser.trainingLocation ?: "home"
 
         when (selectedUser.goal) {
             context.getString(R.string.lose_weight) -> {
@@ -79,8 +83,8 @@ object QuestGenerator {
                 )
                 quests.add(
                     Quest(
-                        name = context.getString(R.string.quest_bicycle_crunches),
-                        amount = (20 * intensityMultiplier * ageFactor * bmiFactor).toInt().coerceAtLeast(12),
+                        name = if (isGym) context.getString(R.string.quest_treadmill) else context.getString(R.string.quest_bicycle_crunches),
+                        amount = (if (isGym) 15 else 20 * intensityMultiplier * ageFactor * bmiFactor).toInt().coerceAtLeast(if (isGym) 10 else 12),
                         complexity = context.getString(R.string.complexity_moderate),
                         date = date
                     )
@@ -89,7 +93,7 @@ object QuestGenerator {
             context.getString(R.string.gain_muscle_mass) -> {
                 quests.add(
                     Quest(
-                        name = context.getString(R.string.quest_push_ups),
+                        name = if (isGym) context.getString(R.string.quest_bench_press) else context.getString(R.string.quest_push_ups),
                         amount = (20 * intensityMultiplier * ageFactor * bmiFactor).toInt().coerceAtLeast(15),
                         complexity = if (intensityMultiplier > 1.0) context.getString(R.string.complexity_hard) else context.getString(R.string.complexity_moderate),
                         date = date
@@ -97,7 +101,7 @@ object QuestGenerator {
                 )
                 quests.add(
                     Quest(
-                        name = context.getString(R.string.quest_squats),
+                        name = if (isGym) context.getString(R.string.quest_deadlift) else context.getString(R.string.quest_squats),
                         amount = (25 * intensityMultiplier * ageFactor * bmiFactor).toInt().coerceAtLeast(20),
                         complexity = context.getString(R.string.complexity_moderate),
                         date = date
@@ -105,7 +109,7 @@ object QuestGenerator {
                 )
                 quests.add(
                     Quest(
-                        name = context.getString(R.string.quest_lunges),
+                        name = if (isGym) context.getString(R.string.quest_lat_pulldown) else context.getString(R.string.quest_lunges),
                         amount = (20 * intensityMultiplier * ageFactor * bmiFactor).toInt().coerceAtLeast(15),
                         complexity = context.getString(R.string.complexity_moderate),
                         date = date
@@ -147,7 +151,7 @@ object QuestGenerator {
                 )
                 quests.add(
                     Quest(
-                        name = context.getString(R.string.quest_sit_ups),
+                        name = if (isGym) context.getString(R.string.quest_leg_press) else context.getString(R.string.quest_sit_ups),
                         amount = (20 * intensityMultiplier * ageFactor * bmiFactor).toInt().coerceAtLeast(15),
                         complexity = context.getString(R.string.complexity_moderate),
                         date = date
@@ -179,6 +183,25 @@ object QuestGenerator {
                         date = date
                     )
                 )
+                if (isGym) {
+                    quests.add(
+                        Quest(
+                            name = context.getString(R.string.quest_treadmill),
+                            amount = 10,
+                            complexity = context.getString(R.string.complexity_moderate),
+                            date = date
+                        )
+                    )
+                } else {
+                    quests.add(
+                        Quest(
+                            name = context.getString(R.string.quest_sit_ups),
+                            amount = 15,
+                            complexity = context.getString(R.string.complexity_moderate),
+                            date = date
+                        )
+                    )
+                }
             }
         }
 

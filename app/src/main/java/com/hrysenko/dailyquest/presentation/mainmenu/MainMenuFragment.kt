@@ -64,10 +64,14 @@ class MainMenuFragment : Fragment() {
 
         loadUserData()
         if (checkActivityRecognitionPermission()) {
-            loadSteps()
+            loadStepsAndCalories()
+            loadQuestProgress()
             setupStepsReceiver()
         } else {
             binding.stepsCount.text = "N/A"
+            binding.caloriesCount.text = "N/A"
+            binding.progressCount.text = "0%"
+            binding.dailyProgressBar.progress = 0
         }
     }
 
@@ -86,7 +90,10 @@ class MainMenuFragment : Fragment() {
         stepsReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 val steps = intent?.getIntExtra(PedometerService.EXTRA_STEPS, 0) ?: 0
+                val calories = intent?.getDoubleExtra(PedometerService.EXTRA_CALORIES, 0.0) ?: 0.0
                 binding.stepsCount.text = steps.toString()
+                binding.caloriesCount.text = String.format("%.0f", calories)
+                loadQuestProgress()
             }
         }
         val filter = IntentFilter(PedometerService.STEP_UPDATE_ACTION)
@@ -152,8 +159,16 @@ class MainMenuFragment : Fragment() {
         }
     }
 
-    private fun loadSteps() {
+    private fun loadStepsAndCalories() {
         binding.stepsCount.text = PedometerService.getCurrentSteps().toString()
+        binding.caloriesCount.text = String.format("%.0f", PedometerService.getCurrentCalories())
+    }
+
+    private fun loadQuestProgress() {
+        val preferences = requireContext().getSharedPreferences("DailyQuestPrefs", Context.MODE_PRIVATE)
+        val progressPercentage = preferences.getInt("quest_progress_percentage", 0)
+        binding.progressCount.text = "$progressPercentage%"
+        binding.dailyProgressBar.progress = progressPercentage
     }
 
     private fun getBMICategory(bmi: Double): String = when {

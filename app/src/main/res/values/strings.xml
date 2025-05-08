@@ -40,7 +40,7 @@
     <string name="login_successful">Successful!</string>
     <string name="done">Done</string>
     <string name="add_new_quest">Add New Quest</string>
-    <string name="day_streak">Day Streak: %d</string>
+    <string name="day_streak">Day Streak: </string>
     <string name="ok">Ok</string>
     <string name="cancelb">Cancel</string>
     <string name="welcome_back">Welcome Back,</string>
@@ -189,7 +189,7 @@
     <string name="completed">Completed</string>
     <string name="in_progress">In Progress</string>
     <string name="undo">Undo</string>
-
+    <string name="homeprof">Home</string>
     <!-- Notification Strings -->
     <string name="quest_reminders">Quest Reminders</string>
     <string name="daily_quests_reminder">Daily Quests Reminder</string>
@@ -200,6 +200,14 @@
     <string name="quest_bicycle_crunches">Bicycle Crunches</string>
     <string name="quest_lunges">Lunges</string>
     <string name="quest_sit_ups">Sit-ups</string>
-
-
+    <string name="gym">Gym</string>
+    <string name="choose_training_location">Please choose a training location</string>
+    <string name="quest_treadmill">Treadmill Running</string>
+    <string name="quest_bench_press">Bench Press</string>
+    <string name="quest_deadlift">Deadlift</string>
+    <string name="quest_lat_pulldown">Lat Pulldown</string>
+    <string name="quest_leg_press">Leg Press</string>
+    <string name="quest_reminder_message">You still have time to complete your daily quests and keep your streak!</string>
+    <string name="calories">Calories</string>
+    <string name="daily_progress">Daily Progress</string>
 </resources>

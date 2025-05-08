@@ -24,14 +24,13 @@ import com.google.android.material.button.MaterialButton
 import com.hrysenko.dailyquest.R
 import com.hrysenko.dailyquest.models.AppDatabase
 import com.hrysenko.dailyquest.services.PedometerService
-import com.hrysenko.dailyquest.presentation.quests.QuestGenerator
-import com.hrysenko.dailyquest.presentation.quests.Quest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.util.Calendar
+import java.util.UUID
 
 class DailyQuestFragment : Fragment() {
 
@@ -42,6 +41,7 @@ class DailyQuestFragment : Fragment() {
     private var quests: MutableList<Quest> = mutableListOf()
     private var lastQuestDate: String? = null
     private var currentSteps: Int = 0
+    private lateinit var dateChangeReceiver: BroadcastReceiver
 
     private val stepReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -50,7 +50,26 @@ class DailyQuestFragment : Fragment() {
             currentSteps = steps
             updateStepQuestProgress(steps)
             questAdapter.updateSteps(steps)
+            updateQuestProgressPercentage()
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        dateChangeReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                if (intent?.action == Intent.ACTION_DATE_CHANGED) {
+                    Log.d("DailyQuestFragment", "Date changed, reloading quests")
+                    loadUserAndQuests()
+                }
+            }
+        }
+        ContextCompat.registerReceiver(
+            requireContext(),
+            dateChangeReceiver,
+            IntentFilter(Intent.ACTION_DATE_CHANGED),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
     }
 
     override fun onCreateView(
@@ -66,14 +85,12 @@ class DailyQuestFragment : Fragment() {
         loadUserAndQuests()
         scheduleDailyNotification()
 
-
         ContextCompat.registerReceiver(
             requireContext(),
             stepReceiver,
             IntentFilter(PedometerService.STEP_UPDATE_ACTION),
             ContextCompat.RECEIVER_NOT_EXPORTED
         )
-
 
         val serviceIntent = Intent(requireContext(), PedometerService::class.java)
         requireContext().startService(serviceIntent)
@@ -84,6 +101,11 @@ class DailyQuestFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         requireContext().unregisterReceiver(stepReceiver)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        requireContext().unregisterReceiver(dateChangeReceiver)
     }
 
     private fun setupRecyclerView() {
@@ -104,11 +126,31 @@ class DailyQuestFragment : Fragment() {
             Log.d("DailyQuestFragment", "User: $user, Today: $today, LastQuestDate: $lastQuestDate, QuestCount: ${quests.size}")
 
 
+            val preferences = requireContext().getSharedPreferences("DailyQuestPrefs", Context.MODE_PRIVATE)
+            val lastStreakDate = preferences.getString("lastStreakDate", null)
+            if (lastStreakDate != null) {
+                val lastDate = LocalDate.parse(lastStreakDate)
+                val daysDifference = java.time.temporal.ChronoUnit.DAYS.between(lastDate, LocalDate.now()).toInt()
+                if (daysDifference > 1) {
+                    with(preferences.edit()) {
+                        putInt("streak", 0)
+                        apply()
+                    }
+                }
+            }
+
             if (lastQuestDate != today || quests.isEmpty()) {
                 quests.clear()
                 val newQuests = QuestGenerator.generateDailyQuests(requireContext(), user)
                 quests.addAll(newQuests)
                 lastQuestDate = today
+
+
+                with(preferences.edit()) {
+                    putString("quest_names_$today", newQuests.joinToString(",") { it.name })
+                    apply()
+                }
+
 
                 quests.forEach { quest ->
                     quest.completed = isQuestCompleted(quest)
@@ -122,13 +164,14 @@ class DailyQuestFragment : Fragment() {
                 questAdapter.submitList(quests.toList(), currentSteps)
                 streakCounter.text = "Day streak: $streak"
                 updateStepQuestProgress(currentSteps)
+                updateQuestProgressPercentage()
                 Log.d("DailyQuestFragment", "Updated UI with ${quests.size} quests")
             }
         }
     }
 
     private fun updateStepQuestProgress(steps: Int) {
-        quests.forEach { quest ->
+        quests.forEachIndexed { index, quest ->
             if (quest.name == getString(R.string.quest_walk)) {
                 quest.completed = steps >= quest.amount
                 saveQuestCompletion(quest)
@@ -136,19 +179,28 @@ class DailyQuestFragment : Fragment() {
                 if (quest.completed && quests.all { it.completed }) {
                     updateStreak()
                 }
+                questAdapter.notifyItemChanged(index)
             }
         }
-        questAdapter.notifyDataSetChanged()
     }
 
     private fun toggleQuestCompletion(quest: Quest) {
-        quest.completed = !quest.completed
-        saveQuestCompletion(quest)
-        Log.d("DailyQuestFragment", "Quest ${quest.name} completion toggled to ${quest.completed}")
-        if (quests.all { it.completed }) {
-            updateStreak()
+
+        if (!quest.completed) {
+            quest.completed = true
+            saveQuestCompletion(quest)
+            Log.d("DailyQuestFragment", "Quest ${quest.name} marked as completed")
+            if (quests.all { it.completed }) {
+                updateStreak()
+            }
+        } else {
+
+            quest.completed = false
+            saveQuestCompletion(quest)
+            Log.d("DailyQuestFragment", "Quest ${quest.name} completion undone")
         }
-        questAdapter.notifyDataSetChanged()
+        questAdapter.notifyItemChanged(quests.indexOf(quest))
+        updateQuestProgressPercentage()
     }
 
     private fun saveQuestCompletion(quest: Quest) {
@@ -164,20 +216,50 @@ class DailyQuestFragment : Fragment() {
         return preferences.getBoolean("quest_${quest.name}_${quest.date}", false)
     }
 
+    private fun updateQuestProgressPercentage() {
+        val totalQuests = quests.size
+        if (totalQuests == 0) return
+        val completedQuests = quests.count { it.completed }
+        val percentage = (completedQuests * 100) / totalQuests
+
+        val preferences = requireContext().getSharedPreferences("DailyQuestPrefs", Context.MODE_PRIVATE)
+        with(preferences.edit()) {
+            putInt("quest_progress_percentage", percentage)
+            apply()
+        }
+        Log.d("DailyQuestFragment", "Quest progress: $completedQuests/$totalQuests, Percentage: $percentage%")
+    }
+
     private fun updateStreak() {
         val preferences = requireContext().getSharedPreferences("DailyQuestPrefs", Context.MODE_PRIVATE)
         val editor = preferences.edit()
         val lastStreakDate = preferences.getString("lastStreakDate", null)
         val currentStreak = preferences.getInt("streak", 0)
-        val today = LocalDate.now().toString()
+        val today = LocalDate.now()
+        val todayString = today.toString()
 
-        if (lastStreakDate == null || lastStreakDate != today) {
-            editor.putInt("streak", currentStreak + 1)
-            editor.putString("lastStreakDate", today)
-            editor.apply()
-            Log.d("DailyQuestFragment", "Streak updated to ${currentStreak + 1}")
+        if (lastStreakDate == null) {
+            editor.putInt("streak", 1)
+            editor.putString("lastStreakDate", todayString)
+        } else {
+            val lastDate = LocalDate.parse(lastStreakDate)
+            val daysDifference = java.time.temporal.ChronoUnit.DAYS.between(lastDate, today).toInt()
+
+            when {
+                daysDifference == 0 -> return
+                daysDifference == 1 -> {
+                    editor.putInt("streak", currentStreak + 1)
+                    editor.putString("lastStreakDate", todayString)
+                }
+                daysDifference > 1 -> {
+                    editor.putInt("streak", 1)
+                    editor.putString("lastStreakDate", todayString)
+                }
+            }
         }
 
+        editor.apply()
+        Log.d("DailyQuestFragment", "Streak updated to ${getStreak()}")
         streakCounter.text = "Day streak: ${getStreak()}"
     }
 
@@ -197,7 +279,7 @@ class DailyQuestFragment : Fragment() {
         )
 
         val calendar = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 20)
+            set(Calendar.HOUR_OF_DAY, 17)
             set(Calendar.MINUTE, 0)
             set(Calendar.SECOND, 0)
             if (timeInMillis < System.currentTimeMillis()) {
@@ -257,7 +339,6 @@ class QuestAdapter(private var currentSteps: Int, private val onQuestToggle: (Qu
             }
             complexity.text = quest.complexity
             if (quest.name == itemView.context.getString(R.string.quest_walk)) {
-                // Disable manual toggle for Walk quest
                 doneButton.text = if (quest.completed) itemView.context.getString(R.string.completed) else itemView.context.getString(R.string.in_progress)
                 doneButton.isEnabled = false
             } else {
@@ -274,12 +355,27 @@ class QuestAdapter(private var currentSteps: Int, private val onQuestToggle: (Qu
 class QuestNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val preferences = context.getSharedPreferences("DailyQuestPrefs", Context.MODE_PRIVATE)
-        val lastStreakDate = preferences.getString("lastStreakDate", null)
         val today = LocalDate.now().toString()
 
-        if (lastStreakDate != today) {
+        val hasIncompleteQuests = checkIncompleteQuests(context, today)
+        if (hasIncompleteQuests) {
             showNotification(context)
         }
+    }
+
+    private fun checkIncompleteQuests(context: Context, today: String): Boolean {
+        val preferences = context.getSharedPreferences("DailyQuestPrefs", Context.MODE_PRIVATE)
+        val questNamesString = preferences.getString("quest_names_$today", "") ?: ""
+        if (questNamesString.isEmpty()) return false
+
+        val questNames = questNamesString.split(",")
+        for (questName in questNames) {
+            val isCompleted = preferences.getBoolean("quest_${questName}_$today", false)
+            if (!isCompleted) {
+                return true
+            }
+        }
+        return false
     }
 
     private fun showNotification(context: Context) {

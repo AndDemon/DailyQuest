@@ -20,6 +20,10 @@
     <style name="bymam_elev" parent="Widget.Material3.CardView.Elevated">
         <item name="shapeAppearance">@style/ShapeAppearanceOverlay.App.Card.Media</item>
     </style>
+
+    <style name="bymam_outl" parent="Widget.Material3.CardView.Outlined">
+        <item name="shapeAppearance">@style/ShapeAppearanceOverlay.App.Card.Media</item>
+    </style>
     <style name="Widget.App.TextInputEditText.EnterName" parent="Widget.Material3.TextInputEditText.OutlinedBox">
         <item name="android:gravity">center_horizontal</item>
         <item name="boxStrokeWidth">0dp</item>

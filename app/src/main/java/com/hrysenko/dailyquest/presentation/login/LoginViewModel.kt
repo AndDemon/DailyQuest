@@ -11,13 +11,20 @@ class LoginViewModel : ViewModel() {
     var sex: String = ""
     var goal: String = ""
     var physLevel: String = ""
+    var trainingLocation: String = ""
 
     fun isDataComplete(): Boolean {
         return name.isNotEmpty() && age != null && height != null && weight != null &&
-                sex.isNotEmpty() && goal.isNotEmpty() && physLevel.isNotEmpty()
+                sex.isNotEmpty() && goal.isNotEmpty() && physLevel.isNotEmpty() && trainingLocation.isNotEmpty()
     }
 
     fun toUser(): User {
+        val trainingLocationValue = when (trainingLocation) {
+            "Gym", "Тренажерний зал" -> "gym"
+            "Home", "Дім" -> "home"
+            else -> "home"
+        }
+
         return User(
             name = name,
             age = age ?: 0,
@@ -25,7 +32,8 @@ class LoginViewModel : ViewModel() {
             weight = weight ?: 0.0,
             sex = sex,
             goal = goal,
-            physLevel = physLevel
+            physLevel = physLevel,
+            trainingLocation = trainingLocationValue
         )
     }
 }

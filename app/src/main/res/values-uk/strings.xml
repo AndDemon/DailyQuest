@@ -14,6 +14,7 @@
     <string name="daily_quest">Щоденний квест</string>
     <string name="profile">Профіль</string>
     <string name="home">Головна</string>
+    <string name="homeprof">Дім</string>
     <string name="welcome_to">Ласкаво просимо до</string>
     <string name="hey_there_enter_your_details">Привіт, <b>введіть ваші дані</b></string>
     <string name="edit">Редагувати</string>
@@ -152,7 +153,6 @@
     <string name="steps">Кроки</string>
     <string name="days">Дні</string>
 
-    <!-- Quest Names -->
     <string name="steps_amount">%d кроків</string>
     <string name="quest_walk">Ходьба</string>
     <string name="quest_jumping_jacks">Стрибки з розведенням рук і ніг</string>
@@ -161,17 +161,17 @@
     <string name="quest_plank">Планка</string>
     <string name="quest_stretch">Розтяжка</string>
 
-    <!-- Complexity Levels -->
+
     <string name="complexity_easy">Легкий</string>
     <string name="complexity_moderate">Середній</string>
     <string name="complexity_hard">Важкий</string>
 
-    <!-- Quest Status -->
+
     <string name="completed">Завершено</string>
     <string name="in_progress">В процесі</string>
     <string name="undo">Скасувати</string>
 
-    <!-- Notification Strings -->
+
     <string name="quest_reminders">Нагадування про квести</string>
     <string name="daily_quests_reminder">Нагадування про щоденні квести</string>
     <string name="uncompleted_quests">У вас є незавершені квести на сьогодні!</string>
@@ -184,4 +184,12 @@
     <string name="quest_bicycle_crunches">Вправа "Велосипед"</string>
     <string name="quest_lunges">Кроки з випадом</string>
     <string name="quest_sit_ups">Скручування на прес</string>
+    <string name="gym">Тренажерний зал</string>
+    <string name="choose_training_location">Будь ласка, оберіть місце тренування</string>
+    <string name="quest_treadmill">Біг на біговій доріжці</string>
+    <string name="quest_bench_press">Жим лежачи</string>
+    <string name="quest_deadlift">Станова тяга</string>
+    <string name="quest_lat_pulldown">Тяга верхнього блоку</string>
+    <string name="quest_leg_press">Жим ногами</string>
+    <string name="quest_reminder_message">У вас ще є час виконати щоденні квести та зберегти серію!</string>
 </resources>

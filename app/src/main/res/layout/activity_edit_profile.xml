@@ -25,10 +25,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/hey_there_edit_your_details"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:gravity="center"
-                android:layout_marginBottom="30dp"
-                android:layout_marginTop="36dp"/>
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="10dp"
+                android:textStyle="normal"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -147,7 +148,31 @@
                     android:layout_height="70dp"
                     android:inputType="none"
                     android:padding="8dp" />
+
             </com.google.android.material.textfield.TextInputLayout>
+            <RadioGroup
+                android:id="@+id/training_location_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/gym_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gym"
+                    android:textSize="16sp"
+                    android:padding="8dp" />
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/home_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@string/homeprof"
+                    android:textSize="16sp" />
+            </RadioGroup>
 
         </LinearLayout>
     </ScrollView>

@@ -13,5 +13,6 @@ data class User(
     var sex: String,                      // User's sex
     var goal: String,                     // User's fitness goal (e.g., lose weight, gain muscle)
     var physLevel: String,                // User's physical activity level
-    var avatar: String? = null            // Avatar URL or local file path (nullable)
+    var avatar: String? = null,
+    var trainingLocation: String?
 )

@@ -40,6 +40,7 @@ class EditProfileActivity : AppCompatActivity() {
         ).build()
 
         setupDropdownMenus()
+        setupTrainingLocation()
         loadUserData()
 
         binding.editProfileBtn.setOnClickListener {
@@ -64,6 +65,12 @@ class EditProfileActivity : AppCompatActivity() {
         binding.loginActivityLevel.setAdapter(activityLevelAdapter)
     }
 
+    private fun setupTrainingLocation() {
+        binding.trainingLocationGroup.setOnCheckedChangeListener { _, checkedId ->
+            // No need to store trainingLocation here; it will be read in saveUserData
+        }
+    }
+
     private fun loadUserData() {
         lifecycleScope.launch(Dispatchers.IO) {
             val user = database.userDao().getUser()
@@ -80,8 +87,15 @@ class EditProfileActivity : AppCompatActivity() {
                     binding.loginGender.setText(user.sex, false)
                     binding.loginGoal.setText(user.goal, false)
                     binding.loginActivityLevel.setText(user.physLevel, false)
+                    // Load training location
+                    when (user.trainingLocation) {
+                        "gym" -> binding.gymRadio.isChecked = true
+                        "home" -> binding.homeRadio.isChecked = true
+                        else -> binding.homeRadio.isChecked = true // Default to home
+                    }
                 } else {
                     Toast.makeText(this@EditProfileActivity, "User data not found", Toast.LENGTH_SHORT).show()
+                    binding.homeRadio.isChecked = true // Default for new users
                 }
             }
         }
@@ -95,14 +109,19 @@ class EditProfileActivity : AppCompatActivity() {
         val gender = binding.loginGender.text.toString()
         val goal = binding.loginGoal.text.toString()
         val activityLevel = binding.loginActivityLevel.text.toString()
+        val trainingLocation = when (binding.trainingLocationGroup.checkedRadioButtonId) {
+            R.id.gym_radio -> getString(R.string.gym)
+            R.id.home_radio -> getString(R.string.home)
+            else -> ""
+        }
 
-        // Перевірка обов'язкових полів, включаючи вагу
-        if (name.isBlank() || age == 0 || weight == null || gender.isBlank() || goal.isBlank() || activityLevel.isBlank()) {
+        // Validate all required fields, including trainingLocation
+        if (name.isBlank() || age == 0 || weight == null || gender.isBlank() || goal.isBlank() || activityLevel.isBlank() || trainingLocation.isBlank()) {
             Toast.makeText(this, getString(R.string.please_fill_all_required_fields), Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Перевірка обмежень
+        // Check constraints
         if (name.length > 12) {
             Toast.makeText(this, getString(R.string.name_too_long), Toast.LENGTH_SHORT).show()
             return
@@ -130,7 +149,7 @@ class EditProfileActivity : AppCompatActivity() {
                 sex = "",
                 goal = "",
                 physLevel = "",
-                avatar = null
+                trainingLocation = "home"
             )
             user.name = name
             user.age = age
@@ -139,6 +158,12 @@ class EditProfileActivity : AppCompatActivity() {
             user.sex = gender
             user.goal = goal
             user.physLevel = activityLevel
+            // Map localized trainingLocation to non-localized value
+            user.trainingLocation = when (trainingLocation) {
+                getString(R.string.gym), "Спортзал" -> "gym"
+                getString(R.string.home), "Дім" -> "home"
+                else -> "home"
+            }
 
             database.userDao().insertUser(user)
 

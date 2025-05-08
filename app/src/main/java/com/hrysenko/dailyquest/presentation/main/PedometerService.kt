@@ -17,6 +17,7 @@ class PedometerService : Service(), SensorEventListener {
     private var stepSensor: Sensor? = null
     private var initialSteps = -1
     private var currentSteps = 0
+    private var currentCalories = 0.0
     private var lastResetTime = 0L
     private lateinit var sharedPreferences: SharedPreferences
     private val job = Job()
@@ -25,13 +26,18 @@ class PedometerService : Service(), SensorEventListener {
     companion object {
         const val STEP_UPDATE_ACTION = "com.hrysenko.dailyquest.STEP_UPDATE"
         const val EXTRA_STEPS = "steps"
+        const val EXTRA_CALORIES = "calories"
         private const val PREFS_NAME = "PedometerPrefs"
         private const val KEY_INITIAL_STEPS = "initialSteps"
         private const val KEY_CURRENT_STEPS = "currentSteps"
+        private const val KEY_CURRENT_CALORIES = "currentCalories"
         private const val KEY_LAST_RESET = "lastResetTime"
+        private const val CALORIES_PER_STEP = 0.04 // Average calories burned per step
 
         private var stepCount = 0
+        private var calorieCount = 0.0
         fun getCurrentSteps(): Int = stepCount
+        fun getCurrentCalories(): Double = calorieCount
     }
 
     override fun onCreate() {
@@ -46,7 +52,6 @@ class PedometerService : Service(), SensorEventListener {
         stepSensor?.let {
             sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_UI)
         } ?: stopSelf()
-
 
         scope.launch {
             scheduleDailyReset()
@@ -71,9 +76,10 @@ class PedometerService : Service(), SensorEventListener {
     private fun restoreState() {
         initialSteps = sharedPreferences.getInt(KEY_INITIAL_STEPS, -1)
         currentSteps = sharedPreferences.getInt(KEY_CURRENT_STEPS, 0)
+        currentCalories = sharedPreferences.getFloat(KEY_CURRENT_CALORIES, 0.0f).toDouble()
         lastResetTime = sharedPreferences.getLong(KEY_LAST_RESET, System.currentTimeMillis())
         stepCount = currentSteps
-
+        calorieCount = currentCalories
 
         val calendar = Calendar.getInstance()
         val lastResetCalendar = Calendar.getInstance().apply { timeInMillis = lastResetTime }
@@ -88,6 +94,7 @@ class PedometerService : Service(), SensorEventListener {
         sharedPreferences.edit().apply {
             putInt(KEY_INITIAL_STEPS, initialSteps)
             putInt(KEY_CURRENT_STEPS, currentSteps)
+            putFloat(KEY_CURRENT_CALORIES, currentCalories.toFloat())
             putLong(KEY_LAST_RESET, lastResetTime)
             apply()
         }
@@ -101,18 +108,20 @@ class PedometerService : Service(), SensorEventListener {
 
         currentSteps = totalSteps - initialSteps
         if (currentSteps < 0) {
-
             initialSteps = totalSteps
             currentSteps = 0
+            currentCalories = 0.0
             saveState()
         }
 
+        currentCalories = currentSteps * CALORIES_PER_STEP
         stepCount = currentSteps
+        calorieCount = currentCalories
         saveState()
-
 
         sendBroadcast(Intent(STEP_UPDATE_ACTION).apply {
             putExtra(EXTRA_STEPS, currentSteps)
+            putExtra(EXTRA_CALORIES, currentCalories)
         })
     }
 
@@ -135,15 +144,16 @@ class PedometerService : Service(), SensorEventListener {
     private fun resetSteps() {
         initialSteps = -1
         currentSteps = 0
+        currentCalories = 0.0
         stepCount = 0
+        calorieCount = 0.0
         lastResetTime = System.currentTimeMillis()
         saveState()
         sendBroadcast(Intent(STEP_UPDATE_ACTION).apply {
             putExtra(EXTRA_STEPS, 0)
+            putExtra(EXTRA_CALORIES, 0.0)
         })
     }
-
-
 
     override fun onDestroy() {
         super.onDestroy()
