@@ -6,9 +6,12 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import android.view.ViewGroup
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -41,7 +44,18 @@ class MainActivity : AppCompatActivity(), MainMenuFragment.OnButtonClickListener
                     settings.javaScriptEnabled = true
                     settings.domStorageEnabled = true
                     settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
-                    webViewClient = WebViewClient()
+                    webViewClient = object : WebViewClient() {
+                        override fun onReceivedError(
+                            view: WebView?,
+                            errorCode: Int,
+                            description: String?,
+                            failingUrl: String?
+                        ) {
+                            super.onReceivedError(view, errorCode, description, failingUrl)
+                            // Log error or show a toast
+                            Log.e("WebViewError", "Error $errorCode: $description for $failingUrl")
+                        }
+                    }
                     loadUrl("https://grok.com/")
                 }
             }
@@ -58,13 +72,29 @@ class MainActivity : AppCompatActivity(), MainMenuFragment.OnButtonClickListener
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        requestNotificationPermission()
-        requestActivityRecognitionPermission()
+        var notificationPermissionWasRequested = false
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestNotificationPermission()
+                notificationPermissionWasRequested = true
+            }
+        }
+
+        if (!notificationPermissionWasRequested) {
+            requestActivityRecognitionPermissionIfNeeded()
+        }
 
         database = AppDatabase.getDatabase(this)
         appDatabase = database
 
-        getSharedWebView(this)
+        // It's good practice to initialize WebView when it's actually needed,
+        // for example, when navigating to the AssistantFragment.
+        // Pre-initializing it here might not be necessary unless it's used immediately.
+        // getSharedWebView(this) // Consider moving this to where it's first used.
 
         setupBottomNavigation()
 
@@ -73,29 +103,22 @@ class MainActivity : AppCompatActivity(), MainMenuFragment.OnButtonClickListener
             binding.bottomNavigation.selectedItemId = R.id.main
         }
 
-
         if (checkActivityRecognitionPermission()) {
-            startService(Intent(this, PedometerService::class.java))
+            startPedometerService()
         }
     }
 
     private fun requestNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                    REQUEST_NOTIFICATION_PERMISSION
-                )
-            }
-        }
+        // This function is defined below, no need to re-check SDK and permission status here
+        // if the function itself does it.
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+            REQUEST_NOTIFICATION_PERMISSION
+        )
     }
 
-    private fun requestActivityRecognitionPermission() {
+    private fun requestActivityRecognitionPermissionIfNeeded() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             if (ContextCompat.checkSelfPermission(
                     this,
@@ -111,6 +134,7 @@ class MainActivity : AppCompatActivity(), MainMenuFragment.OnButtonClickListener
         }
     }
 
+
     private fun checkActivityRecognitionPermission(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             ContextCompat.checkSelfPermission(
@@ -122,33 +146,36 @@ class MainActivity : AppCompatActivity(), MainMenuFragment.OnButtonClickListener
         }
     }
 
+    private fun startPedometerService() {
+        try {
+            startService(Intent(this, PedometerService::class.java))
+        } catch (e: IllegalStateException) {
+            // This can happen if trying to start a foreground service when the app is not in a valid state
+            // (e.g., background on Android 12+ without appropriate exemptions).
+            Log.e("PedometerService", "Failed to start PedometerService: ${e.message}")
+            Toast.makeText(this, "Could not start step counter service.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
     private fun setupBottomNavigation() {
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             val currentFragment = supportFragmentManager.findFragmentById(R.id.main_fragments)
-
             when (item.itemId) {
                 R.id.main -> {
-                    if (currentFragment !is MainMenuFragment) {
-                        loadFragment(MainMenuFragment())
-                    }
+                    if (currentFragment !is MainMenuFragment) loadFragment(MainMenuFragment())
                     true
                 }
                 R.id.assistant -> {
-                    if (currentFragment !is AssistantFragment) {
-                        loadFragment(AssistantFragment())
-                    }
+                    if (currentFragment !is AssistantFragment) loadFragment(AssistantFragment())
                     true
                 }
                 R.id.dailyQuest -> {
-                    if (currentFragment !is QuestsFragment) {
-                        loadFragment(QuestsFragment())
-                    }
+                    if (currentFragment !is QuestsFragment) loadFragment(QuestsFragment())
                     true
                 }
                 R.id.profile -> {
-                    if (currentFragment !is ProfileFragment) {
-                        loadFragment(ProfileFragment())
-                    }
+                    if (currentFragment !is ProfileFragment) loadFragment(ProfileFragment())
                     true
                 }
                 else -> false
@@ -164,7 +191,10 @@ class MainActivity : AppCompatActivity(), MainMenuFragment.OnButtonClickListener
 
     override fun onDestroy() {
         super.onDestroy()
-        sharedWebView?.destroy()
+        sharedWebView?.let {
+            (it.parent as? ViewGroup)?.removeView(it)
+            it.destroy()
+        }
         sharedWebView = null
     }
 
@@ -181,13 +211,17 @@ class MainActivity : AppCompatActivity(), MainMenuFragment.OnButtonClickListener
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             REQUEST_NOTIFICATION_PERMISSION -> {
-
+                // After notification permission result, request activity recognition if needed
+                requestActivityRecognitionPermissionIfNeeded()
+                // No need to explicitly check if granted here for starting service,
+                // that will be handled when REQUEST_ACTIVITY_RECOGNITION_PERMISSION result comes
+                // or if it was already granted.
             }
             REQUEST_ACTIVITY_RECOGNITION_PERMISSION -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startService(Intent(this, PedometerService::class.java))
+                    startPedometerService()
                 } else {
-
+                    Toast.makeText(this, "Activity recognition permission denied. Step counting will not work.", Toast.LENGTH_LONG).show()
                 }
             }
         }

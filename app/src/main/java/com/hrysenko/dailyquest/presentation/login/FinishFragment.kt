@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -18,6 +19,7 @@ import androidx.lifecycle.lifecycleScope
 import com.hrysenko.dailyquest.R
 import com.hrysenko.dailyquest.databinding.FragmentFinishBinding
 import com.hrysenko.dailyquest.models.AppDatabase
+// import com.hrysenko.dailyquest.models.User // You'll need this if LoginViewModel.toUser() returns a User object
 import com.hrysenko.dailyquest.presentation.main.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,7 +40,7 @@ class FinishFragment : Fragment() {
         return binding.root
     }
 
-    @SuppressLint("StringFormatInvalid")
+    @SuppressLint("StringFormatInvalid") // Check if your R.string.name_too_long actually uses formatting
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -69,17 +71,19 @@ class FinishFragment : Fragment() {
             if (name.length > maxNameLength) {
                 Toast.makeText(
                     requireContext(),
-                    getString(R.string.name_too_long, maxNameLength),
+                    getString(R.string.name_too_long, maxNameLength), // Ensure this string accepts an argument
                     Toast.LENGTH_SHORT
                 ).show()
                 return@setOnClickListener
             }
 
-            viewModel.name = name
+            viewModel.name = name // Assuming LoginViewModel has: var name: String = ""
 
-            if (viewModel.isDataComplete()) {
+            if (viewModel.isDataComplete()) { // Assuming LoginViewModel has: fun isDataComplete(): Boolean
                 lifecycleScope.launch(Dispatchers.IO) {
                     val database = AppDatabase.getDatabase(requireContext())
+                    // Assuming LoginViewModel has: fun toUser(): User
+                    // And UserDao has: suspend fun insertUser(user: User)
                     database.userDao().insertUser(viewModel.toUser())
 
                     requireActivity().getSharedPreferences("dailyquest_prefs", Context.MODE_PRIVATE)
@@ -93,8 +97,10 @@ class FinishFragment : Fragment() {
                             getString(R.string.data_saved),
                             Toast.LENGTH_SHORT
                         ).show()
-                        startActivity(Intent(requireContext(), MainActivity::class.java))
-                        requireActivity().finish()
+                        startActivity(Intent(requireContext(), MainActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        })
+                        requireActivity().finish() // finish LoginActivity
                     }
                 }
             } else {
@@ -108,13 +114,21 @@ class FinishFragment : Fragment() {
     }
 
     private fun vibrateDevice() {
-        val vibrator = requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        if (vibrator.hasVibrator()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                val effect = VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
-                vibrator.vibrate(effect)
-            } else {
-                vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
+        val vibrator = ContextCompat.getSystemService(requireContext(), Vibrator::class.java)
+        vibrator?.let {
+            if (it.hasVibrator()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    val effect = VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
+                    it.vibrate(effect)
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    // Fallback for API 26-28 if EFFECT_CLICK is not desired/available or for consistency
+                    val effect = VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE)
+                    it.vibrate(effect)
+                } else {
+                    // For older APIs (deprecated in API 26)
+                    @Suppress("DEPRECATION")
+                    it.vibrate(50)
+                }
             }
         }
     }

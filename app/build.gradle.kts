@@ -16,13 +16,19 @@ android {
         applicationId = "com.hrysenko.dailyquest"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas")
+        }
+
+        dependenciesInfo {
+            includeInApk = false
+            includeInBundle = false
         }
 
     }
