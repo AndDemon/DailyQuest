@@ -124,21 +124,31 @@ class MainActivity : AppCompatActivity(), MainMenuFragment.OnButtonClickListener
 
     private fun setupBottomNavigation() {
         binding.bottomNavigation.setOnItemSelectedListener { item ->
+            val currentFragment = supportFragmentManager.findFragmentById(R.id.main_fragments)
+
             when (item.itemId) {
                 R.id.main -> {
-                    loadFragment(MainMenuFragment())
+                    if (currentFragment !is MainMenuFragment) {
+                        loadFragment(MainMenuFragment())
+                    }
                     true
                 }
                 R.id.assistant -> {
-                    loadFragment(AssistantFragment())
+                    if (currentFragment !is AssistantFragment) {
+                        loadFragment(AssistantFragment())
+                    }
                     true
                 }
                 R.id.dailyQuest -> {
-                    loadFragment(QuestsFragment())
+                    if (currentFragment !is QuestsFragment) {
+                        loadFragment(QuestsFragment())
+                    }
                     true
                 }
                 R.id.profile -> {
-                    loadFragment(ProfileFragment())
+                    if (currentFragment !is ProfileFragment) {
+                        loadFragment(ProfileFragment())
+                    }
                     true
                 }
                 else -> false

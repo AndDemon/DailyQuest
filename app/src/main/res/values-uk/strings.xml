@@ -26,12 +26,12 @@
     <string name="kg">кг</string>
     <string name="other">Інше</string>
     <string name="support">Підтримка</string>
-    <string name="about">Про додаток</string>
+    <string name="about">Про застосунок</string>
     <string name="settings">Налаштування</string>
     <string name="login_successful">Успішно!</string>
     <string name="done">Готово</string>
     <string name="add_new_quest">Додати новий квест</string>
-    <string name="day_streak">Відрізок: </string>
+    <string name="day_streak">Серія днів: %1$d</string>
     <string name="ok">Ок</string>
     <string name="cancelb">Скасувати</string>
     <string name="welcome_back">З поверненням,</string>
@@ -192,4 +192,6 @@
     <string name="quest_lat_pulldown">Тяга верхнього блоку</string>
     <string name="quest_leg_press">Жим ногами</string>
     <string name="quest_reminder_message">У вас ще є час виконати щоденні квести та зберегти серію!</string>
+    <string name="calories">Калорії</string>
+    <string name="daily_progress">Щоденний прогрес</string>
 </resources>

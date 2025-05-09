@@ -1,5 +1,6 @@
 package com.hrysenko.dailyquest.presentation.quests
 
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -118,6 +119,7 @@ class DailyQuestFragment : Fragment() {
         questsRecyclerView.adapter = questAdapter
     }
 
+    @SuppressLint("StringFormatInvalid")
     private fun loadUserAndQuests() {
         CoroutineScope(Dispatchers.IO).launch {
             val user = database.userDao().getUser()
@@ -162,7 +164,8 @@ class DailyQuestFragment : Fragment() {
             currentSteps = PedometerService.getCurrentSteps()
             withContext(Dispatchers.Main) {
                 questAdapter.submitList(quests.toList(), currentSteps)
-                streakCounter.text = "Day streak: $streak"
+                val streakText = getString(R.string.day_streak, streak)
+                streakCounter.text = streakText
                 updateStepQuestProgress(currentSteps)
                 updateQuestProgressPercentage()
                 Log.d("DailyQuestFragment", "Updated UI with ${quests.size} quests")

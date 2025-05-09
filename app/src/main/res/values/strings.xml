@@ -40,7 +40,7 @@
     <string name="login_successful">Successful!</string>
     <string name="done">Done</string>
     <string name="add_new_quest">Add New Quest</string>
-    <string name="day_streak">Day Streak: </string>
+    <string name="day_streak">Day Streak: %1$d</string>
     <string name="ok">Ok</string>
     <string name="cancelb">Cancel</string>
     <string name="welcome_back">Welcome Back,</string>

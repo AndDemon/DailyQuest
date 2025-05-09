@@ -31,6 +31,7 @@ class MainMenuFragment : Fragment() {
     private var callback: OnButtonClickListener? = null
     private var bmiDialog: androidx.appcompat.app.AlertDialog? = null
     private lateinit var stepsReceiver: BroadcastReceiver
+    private var isStepsReceiverRegistered = false
 
     interface OnButtonClickListener {
         fun onCheckButtonClick()
@@ -63,10 +64,23 @@ class MainMenuFragment : Fragment() {
         }
 
         loadUserData()
+        updateStepsAndCaloriesUI()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Re-check permission and update UI when fragment resumes
+        updateStepsAndCaloriesUI()
+    }
+
+    private fun updateStepsAndCaloriesUI() {
         if (checkActivityRecognitionPermission()) {
             loadStepsAndCalories()
             loadQuestProgress()
-            setupStepsReceiver()
+            if (!isStepsReceiverRegistered) {
+                setupStepsReceiver()
+                isStepsReceiverRegistered = true
+            }
         } else {
             binding.stepsCount.text = "N/A"
             binding.caloriesCount.text = "N/A"
@@ -220,8 +234,9 @@ class MainMenuFragment : Fragment() {
     override fun onDestroyView() {
         bmiDialog?.dismiss()
         bmiDialog = null
-        if (::stepsReceiver.isInitialized) {
+        if (isStepsReceiverRegistered) {
             requireContext().unregisterReceiver(stepsReceiver)
+            isStepsReceiverRegistered = false
         }
         super.onDestroyView()
         _binding = null
