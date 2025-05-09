@@ -1,0 +1,17 @@
+DailyQuest is a free and open-source fitness app that helps users reach their goals through daily quests and personalized workouts. It offers:
+
+🏆 Daily fitness tasks now adapted to your goals and condition — whether you train at home or in the gym
+
+✍️ Ability to create and manage your own custom quests
+
+📊 BMI calculator and calorie step tracker (pedometer with calorie counting)
+
+🔁 Day streak system to build consistency and motivation
+
+🎨 Modern Material 3 UI for a smooth and clean experience
+
+🛡️ Fully offline, no ads, no tracking, no server connection required
+
+DailyQuest is 100% privacy-respecting and account-free. It’s ideal for building healthy habits, staying active, and keeping track of your progress—without distractions or third-party dependencies.
+
+The app is designed with openness and user freedom in mind. Source code is available on GitHub (https://github.com/AndDemon/DailyQuest).

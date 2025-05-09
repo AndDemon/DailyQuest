@@ -1,0 +1,1 @@
+A personal fitness tracker with daily quests, custom challenges, and motivation.
