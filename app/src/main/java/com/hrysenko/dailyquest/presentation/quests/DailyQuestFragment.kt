@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.hrysenko.dailyquest.R
 import com.hrysenko.dailyquest.models.AppDatabase
+import com.hrysenko.dailyquest.presentation.main.MainActivity
 import com.hrysenko.dailyquest.services.PedometerService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -384,6 +385,21 @@ class QuestNotificationReceiver : BroadcastReceiver() {
     private fun showNotification(context: Context) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channelId = "quest_reminder"
+
+
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            putExtra("openFragment", "DailyQuestFragment")
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
@@ -393,11 +409,14 @@ class QuestNotificationReceiver : BroadcastReceiver() {
             notificationManager.createNotificationChannel(channel)
         }
 
+
         val notification = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(context.getString(R.string.daily_quests_reminder))
             .setContentText(context.getString(R.string.uncompleted_quests))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
             .build()
 
         notificationManager.notify(1, notification)

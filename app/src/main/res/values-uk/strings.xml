@@ -197,4 +197,6 @@
     <string name="add">Додати</string>
     <string name="step_counter">Лічильник кроків</string>
     <string name="counting_your_steps">Рахуємо ваші кроки...</string>
+    <string name="widget_steps_format">%d кроків</string>
+    <string name="widget_calories_format">%.1f ккал</string>
 </resources>

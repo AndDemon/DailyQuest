@@ -8,7 +8,4 @@ buildscript {
         google()
         mavenCentral()
     }
-    dependencies {
-        classpath(libs.androidx.navigation.safe.args.gradle.plugin)
-    }
 }

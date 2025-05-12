@@ -213,4 +213,12 @@
     <string name="add">Add</string>
     <string name="step_counter">Step Counter</string>
     <string name="counting_your_steps">Counting your steps...</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
+    <string name="steps_label">Steps</string>
+    <string name="calories_label">Calories</string>
+    <string name="widget_steps_format">%d steps</string>
+    <string name="widget_calories_format">%.1f kcal</string>
+
 </resources>

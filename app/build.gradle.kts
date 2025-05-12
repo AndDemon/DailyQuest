@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp")
-    id ("androidx.navigation.safeargs.kotlin")
 
 }
 
@@ -12,24 +11,18 @@ android {
     namespace = "com.hrysenko.dailyquest"
     compileSdk = 35
 
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
     defaultConfig {
         applicationId = "com.hrysenko.dailyquest"
         minSdk = 26
         targetSdk = 35
-        versionCode = 3
-        versionName = "1.2"
+        versionCode = 4
+        versionName = "1.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-
-        ksp {
-            arg("room.schemaLocation", "$projectDir/schemas")
-        }
-
-        dependenciesInfo {
-            includeInApk = false
-            includeInBundle = false
-        }
 
     }
 
