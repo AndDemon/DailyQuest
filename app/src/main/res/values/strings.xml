@@ -210,4 +210,7 @@
     <string name="quest_reminder_message">You still have time to complete your daily quests and keep your streak!</string>
     <string name="calories">Calories</string>
     <string name="daily_progress">Daily Progress</string>
+    <string name="add">Add</string>
+    <string name="step_counter">Step Counter</string>
+    <string name="counting_your_steps">Counting your steps...</string>
 </resources>

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="18dp">
+        android:padding="11dp">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/quest_name_input_layout"
@@ -59,7 +59,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/save" />
+            android:text="@string/add"
+            android:layout_marginTop="8dp"/>
 
     </LinearLayout>
 

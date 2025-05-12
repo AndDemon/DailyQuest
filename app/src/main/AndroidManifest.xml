@@ -11,10 +11,12 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission
         android:name="android.permission.USE_EXACT_ALARM"
         android:maxSdkVersion="34"
         tools:ignore="UsesPermissionMaxSdkVersion" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -49,11 +51,19 @@
             android:name=".services.PedometerService"
             android:enabled="true"
             android:exported="false"
-            android:foregroundServiceType="health" />
+            android:foregroundServiceType="health|specialUse" />
         <receiver
             android:name=".presentation.quests.QuestNotificationReceiver"
             android:enabled="true"
             android:exported="false" />
-
+        <receiver
+            android:name=".services.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

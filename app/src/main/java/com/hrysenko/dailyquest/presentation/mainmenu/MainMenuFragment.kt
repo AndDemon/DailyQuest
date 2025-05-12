@@ -69,8 +69,15 @@ class MainMenuFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        // Re-check permission and update UI when fragment resumes
         updateStepsAndCaloriesUI()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (isStepsReceiverRegistered) {
+            requireContext().unregisterReceiver(stepsReceiver)
+            isStepsReceiverRegistered = false
+        }
     }
 
     private fun updateStepsAndCaloriesUI() {
@@ -86,6 +93,11 @@ class MainMenuFragment : Fragment() {
             binding.caloriesCount.text = "N/A"
             binding.progressCount.text = "0%"
             binding.dailyProgressBar.progress = 0
+            Toast.makeText(
+                requireContext(),
+                "Please grant activity recognition permission to count steps.",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -118,7 +130,7 @@ class MainMenuFragment : Fragment() {
                 requireContext(),
                 stepsReceiver,
                 filter,
-                ContextCompat.RECEIVER_NOT_EXPORTED
+                Context.RECEIVER_NOT_EXPORTED
             )
         }
     }

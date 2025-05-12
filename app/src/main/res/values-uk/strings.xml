@@ -194,4 +194,7 @@
     <string name="quest_reminder_message">У вас ще є час виконати щоденні квести та зберегти серію!</string>
     <string name="calories">Калорії</string>
     <string name="daily_progress">Щоденний прогрес</string>
+    <string name="add">Додати</string>
+    <string name="step_counter">Лічильник кроків</string>
+    <string name="counting_your_steps">Рахуємо ваші кроки...</string>
 </resources>

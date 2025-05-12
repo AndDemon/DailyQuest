@@ -52,7 +52,6 @@ class MainActivity : AppCompatActivity(), MainMenuFragment.OnButtonClickListener
                             failingUrl: String?
                         ) {
                             super.onReceivedError(view, errorCode, description, failingUrl)
-                            // Log error or show a toast
                             Log.e("WebViewError", "Error $errorCode: $description for $failingUrl")
                         }
                     }
@@ -72,91 +71,63 @@ class MainActivity : AppCompatActivity(), MainMenuFragment.OnButtonClickListener
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var notificationPermissionWasRequested = false
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                requestNotificationPermission()
-                notificationPermissionWasRequested = true
-            }
-        }
-
-        if (!notificationPermissionWasRequested) {
-            requestActivityRecognitionPermissionIfNeeded()
-        }
-
         database = AppDatabase.getDatabase(this)
         appDatabase = database
 
-        // It's good practice to initialize WebView when it's actually needed,
-        // for example, when navigating to the AssistantFragment.
-        // Pre-initializing it here might not be necessary unless it's used immediately.
-        // getSharedWebView(this) // Consider moving this to where it's first used.
-
+        checkAndRequestPermissions()
         setupBottomNavigation()
 
         if (savedInstanceState == null) {
             loadFragment(MainMenuFragment())
             binding.bottomNavigation.selectedItemId = R.id.main
         }
+    }
 
-        if (checkActivityRecognitionPermission()) {
-            startPedometerService()
+    private fun checkAndRequestPermissions() {
+        val permissionsToRequest = mutableListOf<String>()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                permissionsToRequest.add(Manifest.permission.POST_NOTIFICATIONS)
+            }
         }
-    }
-
-    private fun requestNotificationPermission() {
-        // This function is defined below, no need to re-check SDK and permission status here
-        // if the function itself does it.
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-            REQUEST_NOTIFICATION_PERMISSION
-        )
-    }
-
-    private fun requestActivityRecognitionPermissionIfNeeded() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             if (ContextCompat.checkSelfPermission(
                     this,
                     Manifest.permission.ACTIVITY_RECOGNITION
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
-                    REQUEST_ACTIVITY_RECOGNITION_PERMISSION
-                )
+                permissionsToRequest.add(Manifest.permission.ACTIVITY_RECOGNITION)
             }
         }
-    }
 
-
-    private fun checkActivityRecognitionPermission(): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            ContextCompat.checkSelfPermission(
+        if (permissionsToRequest.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
                 this,
-                Manifest.permission.ACTIVITY_RECOGNITION
-            ) == PackageManager.PERMISSION_GRANTED
+                permissionsToRequest.toTypedArray(),
+                REQUEST_NOTIFICATION_PERMISSION
+            )
         } else {
-            true
+            startPedometerService()
         }
     }
 
     private fun startPedometerService() {
         try {
-            startService(Intent(this, PedometerService::class.java))
-        } catch (e: IllegalStateException) {
-            // This can happen if trying to start a foreground service when the app is not in a valid state
-            // (e.g., background on Android 12+ without appropriate exemptions).
+            val intent = Intent(this, PedometerService::class.java)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent)
+            } else {
+                startService(intent)
+            }
+        } catch (e: Exception) {
             Log.e("PedometerService", "Failed to start PedometerService: ${e.message}")
             Toast.makeText(this, "Could not start step counter service.", Toast.LENGTH_SHORT).show()
         }
     }
-
 
     private fun setupBottomNavigation() {
         binding.bottomNavigation.setOnItemSelectedListener { item ->
@@ -209,20 +180,24 @@ class MainActivity : AppCompatActivity(), MainMenuFragment.OnButtonClickListener
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            REQUEST_NOTIFICATION_PERMISSION -> {
-                // After notification permission result, request activity recognition if needed
-                requestActivityRecognitionPermissionIfNeeded()
-                // No need to explicitly check if granted here for starting service,
-                // that will be handled when REQUEST_ACTIVITY_RECOGNITION_PERMISSION result comes
-                // or if it was already granted.
+        if (requestCode == REQUEST_NOTIFICATION_PERMISSION) {
+            val activityRecognitionGranted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACTIVITY_RECOGNITION
+                ) == PackageManager.PERMISSION_GRANTED
+            } else {
+                true
             }
-            REQUEST_ACTIVITY_RECOGNITION_PERMISSION -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startPedometerService()
-                } else {
-                    Toast.makeText(this, "Activity recognition permission denied. Step counting will not work.", Toast.LENGTH_LONG).show()
-                }
+
+            if (activityRecognitionGranted) {
+                startPedometerService()
+            } else {
+                Toast.makeText(
+                    this,
+                    "Activity recognition permission denied. Step counting will not work.",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
