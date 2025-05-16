@@ -15,6 +15,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -118,6 +119,9 @@ class DailyQuestFragment : Fragment() {
         }
         questsRecyclerView.layoutManager = LinearLayoutManager(context)
         questsRecyclerView.adapter = questAdapter
+
+        // Додаємо анімацію до RecyclerView
+        questsRecyclerView.layoutAnimation = AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.recycler_view_layout_animation)
     }
 
     @SuppressLint("StringFormatInvalid")
@@ -127,7 +131,6 @@ class DailyQuestFragment : Fragment() {
             val today = LocalDate.now().toString()
 
             Log.d("DailyQuestFragment", "User: $user, Today: $today, LastQuestDate: $lastQuestDate, QuestCount: ${quests.size}")
-
 
             val preferences = requireContext().getSharedPreferences("DailyQuestPrefs", Context.MODE_PRIVATE)
             val lastStreakDate = preferences.getString("lastStreakDate", null)
@@ -148,12 +151,10 @@ class DailyQuestFragment : Fragment() {
                 quests.addAll(newQuests)
                 lastQuestDate = today
 
-
                 with(preferences.edit()) {
                     putString("quest_names_$today", newQuests.joinToString(",") { it.name })
                     apply()
                 }
-
 
                 quests.forEach { quest ->
                     quest.completed = isQuestCompleted(quest)
@@ -169,6 +170,8 @@ class DailyQuestFragment : Fragment() {
                 streakCounter.text = streakText
                 updateStepQuestProgress(currentSteps)
                 updateQuestProgressPercentage()
+
+                questsRecyclerView.scheduleLayoutAnimation()
                 Log.d("DailyQuestFragment", "Updated UI with ${quests.size} quests")
             }
         }

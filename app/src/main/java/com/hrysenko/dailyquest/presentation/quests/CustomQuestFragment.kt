@@ -27,6 +27,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collectLatest
 import android.text.InputFilter
+import android.view.animation.AnimationUtils
 import android.widget.ArrayAdapter
 
 class CustomQuestFragment : Fragment() {
@@ -59,9 +60,14 @@ class CustomQuestFragment : Fragment() {
         recyclerView.adapter = questAdapter
         recyclerView.itemAnimator = DefaultItemAnimator()
 
+
+        recyclerView.layoutAnimation = AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.recycler_view_layout_animation)
+
         lifecycleScope.launch {
             questDao.getAllQuests().collectLatest { quests ->
                 questAdapter.submitList(quests)
+
+                recyclerView.scheduleLayoutAnimation()
             }
         }
 

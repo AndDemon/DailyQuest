@@ -155,8 +155,18 @@ class MainActivity : AppCompatActivity(), MainMenuFragment.OnButtonClickListener
     }
 
     private fun loadFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_fragments, fragment)
+
+        val transaction = supportFragmentManager.beginTransaction()
+
+
+        fragment.enterTransition = com.google.android.material.transition.MaterialFadeThrough()
+        fragment.exitTransition = com.google.android.material.transition.MaterialFadeThrough()
+
+        fragment.reenterTransition = com.google.android.material.transition.MaterialFadeThrough()
+        fragment.returnTransition = com.google.android.material.transition.MaterialFadeThrough()
+
+
+        transaction.replace(R.id.main_fragments, fragment)
             .commit()
     }
 

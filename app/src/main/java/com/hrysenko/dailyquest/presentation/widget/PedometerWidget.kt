@@ -6,9 +6,7 @@ import android.content.Context
 import android.widget.RemoteViews
 import com.hrysenko.dailyquest.R
     
-/**
- * Implementation of App Widget functionality.
- */
+
 class PedometerWidget : AppWidgetProvider() {
     override fun onUpdate(
         context: Context,

@@ -48,9 +48,26 @@ class LoginActivity : AppCompatActivity() {
     fun showFragment(fragment: Fragment) {
         val fragmentClass = fragment::class.java
 
+        // Create a FragmentTransaction
+        val transaction = supportFragmentManager.beginTransaction()
+
+        // Set MaterialFadeThrough transitions
+        fragment.enterTransition = com.google.android.material.transition.MaterialFadeThrough().apply {
+            duration = 300 // Duration in milliseconds
+        }
+        fragment.exitTransition = com.google.android.material.transition.MaterialFadeThrough().apply {
+            duration = 300
+        }
+        fragment.reenterTransition = com.google.android.material.transition.MaterialFadeThrough().apply {
+            duration = 300
+        }
+        fragment.returnTransition = com.google.android.material.transition.MaterialFadeThrough().apply {
+            duration = 300
+        }
+
+        // Handle FinishFragment case
         if (fragmentClass == FinishFragment::class.java) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment)
+            transaction.replace(R.id.fragment_container, fragment)
                 .addToBackStack(fragmentClass.simpleName)
                 .commit()
             updateProgressBar()
@@ -64,8 +81,8 @@ class LoginActivity : AppCompatActivity() {
 
         updateProgressBar()
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
+        // Replace fragment with transaction
+        transaction.replace(R.id.fragment_container, fragment)
             .addToBackStack(fragmentClass.simpleName)
             .commit()
     }
