@@ -19,8 +19,8 @@ android {
         applicationId = "com.hrysenko.dailyquest"
         minSdk = 26
         targetSdk = 35
-        versionCode = 5
-        versionName = "1.4"
+        versionCode = 6
+        versionName = "1.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -62,8 +62,8 @@ android {
 
 dependencies {
 
-    implementation ("com.intuit.sdp:sdp-android:1.1.1")
-    implementation ("com.intuit.ssp:ssp-android:1.1.1")
+    implementation (libs.sdp.android)
+    implementation (libs.ssp.android)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

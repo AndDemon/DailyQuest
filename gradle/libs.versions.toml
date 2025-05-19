@@ -14,6 +14,8 @@ navigationUi = "2.9.0"
 okhttp = "4.12.0"
 retrofit = "2.11.0"
 roomRuntimeVersion = "2.7.1"
+sdpAndroid = "1.1.1"
+sspAndroid = "1.1.1"
 webkit = "1.13.0"
 annotation = "1.9.1"
 lifecycleLivedataKtx = "2.9.0"
@@ -42,6 +44,8 @@ room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRunti
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
 androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
+sdp-android = { module = "com.intuit.sdp:sdp-android", version.ref = "sdpAndroid" }
+ssp-android = { module = "com.intuit.ssp:ssp-android", version.ref = "sspAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
