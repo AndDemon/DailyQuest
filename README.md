@@ -12,4 +12,4 @@
 * Material Design 3 – сучасний дизайн застосунку
 ## Опублікований продукт
 Інсталяційний пакет створеного застосунку можна завантажити з магазину
-[f-droid](https://f-droid.org/en/)
+[apkpure](https://apkpure.com/p/com.hrysenko.dailyquest)
