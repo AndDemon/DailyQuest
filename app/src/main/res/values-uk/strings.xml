@@ -17,6 +17,7 @@
     <string name="homeprof">Дім</string>
     <string name="welcome_to">Ласкаво просимо до</string>
     <string name="hey_there_enter_your_details">Привіт, <b>введіть ваші дані</b></string>
+    <string name="hey_there_edit_your_details"><b>Відредагуйте свої дані</b></string>
     <string name="edit">Редагувати</string>
     <string name="height">Зріст</string>
     <string name="weight">Вага</string>
@@ -28,6 +29,7 @@
     <string name="support">Підтримка</string>
     <string name="about">Про застосунок</string>
     <string name="settings">Налаштування</string>
+    <string name="back">Назад</string>
     <string name="login_successful">Успішно!</string>
     <string name="done">Готово</string>
     <string name="add_new_quest">Додати новий квест</string>
@@ -35,7 +37,6 @@
     <string name="ok">Ок</string>
     <string name="cancelb">Скасувати</string>
     <string name="welcome_back">З поверненням,</string>
-    <string name="hey_there_edit_your_details"><b>Відредагуйте свої дані</b></string>
     <string name="view_more">Переглянути більше</string>
     <string name="bmi_body_mass_index">ІМТ (Індекс маси тіла)</string>
     <string name="you_are_underweight">Ви маєте недостатню вагу</string>
@@ -63,30 +64,6 @@
     <string name="hard">Важкий</string>
     <string name="you_ve_already_confirmed_all_quests_today">Ви вже виконали всі квести сьогодні!</string>
     <string name="chat_assistant">Чат-помічник</string>
-    <string name="back">Назад</string>
-    <string-array name="sex_options">
-        <item>Чоловік</item>
-        <item>Жінка</item>
-    </string-array>
-
-    <string-array name="goal_options">
-        <item>Схуднути</item>
-        <item>Набрати м\'язову масу</item>
-        <item>Підтримувати форму</item>
-    </string-array>
-
-    <string-array name="phys_level_options">
-        <item>Сидячий</item>
-        <item>Легкий</item>
-        <item>Помірний</item>
-        <item>Активний</item>
-    </string-array>
-
-    <string-array name="complexity_levels">
-        <item>Легкий</item>
-        <item>Середній</item>
-        <item>Важкий</item>
-    </string-array>
     <string name="confirm_all_quests">Підтвердити всі квести</string>
     <string name="save">Зберегти</string>
     <string name="repetitions">Кількість повторень</string>
@@ -101,18 +78,18 @@
     <string name="_55_minutes_1400_kcal_6_exercises">55 хвилин, 1400 ккал, 6 вправ</string>
     <string name="_30_minutes_1340_kcal_6_exercises">30 хвилин, 1340 ккал, 6 вправ</string>
     <string name="time_to_complete_your_daily_fitness_quests">Час виконувати свої щоденні фітнес-квести!</string>
-    <string name="choose_sex">Виберіть стать</string>
-    <string name="enter_correct_age">Введіть коректний вік (10-100)</string>
-    <string name="n_years">%1$s років</string>
     <string name="next">Далі</string>
     <string name="female">Жінка</string>
     <string name="male">Чоловік</string>
     <string name="data_saved">Дані збережено!</string>
     <string name="Fill_in_all_fields">Заповніть усі поля</string>
     <string name="enter_your_name">Введіть ваше ім\'я</string>
-    <string name="start">Почати</string>
     <string name="setup_profile_hint">Давайте налаштуємо ваш профіль для найкращого досвіду</string>
     <string name="setup_profile_greeting">Ласкаво просимо до DailyQuest!</string>
+    <string name="enter_correct_age">Введіть коректний вік (10-100)</string>
+    <string name="n_years">%1$s років</string>
+    <string name="start">Почати</string>
+    <string name="choose_sex">Виберіть стать</string>
     <string name="enter_height">Введіть зріст від 100 до 250 см</string>
     <string name="n_cm">%1$s см</string>
     <string name="n_kg">%1$s кг</string>
@@ -136,9 +113,9 @@
     <string name="active">Активний</string>
     <string name="choose_phys_level">Будь ласка, виберіть рівень фізичної активності</string>
     <string name="complexity_hint">Складність</string>
+    <string name="notification">Сповіщення</string>
     <string name="notif_on">Сповіщення увімкнені</string>
     <string name="notif_off">Сповіщення вимкнені</string>
-    <string name="notification">Сповіщення</string>
     <string name="your_gender">Ваша стать</string>
     <string name="your_activity_level">Ваш рівень активності</string>
     <string name="profile_updated_successfully">Профіль успішно оновлено</string>
@@ -152,7 +129,10 @@
     <string name="contact_our_support">Зверніться до служби підтримки</string>
     <string name="steps">Кроки</string>
     <string name="days">Дні</string>
-
+    <string name="steps_not_reached">Потрібно ще %d кроків, щоб завершити квести</string>
+    <string name="all_quests_completed">Усі квести завершено!</string>
+    <string name="steps_progress">Кроки: %d/%d</string>
+    <string name="quest_completed">Завдання виконано!</string>
     <string name="steps_amount">%d кроків</string>
     <string name="quest_walk">Ходьба</string>
     <string name="quest_jumping_jacks">Стрибки з розведенням рук і ніг</string>
@@ -160,28 +140,18 @@
     <string name="quest_squats">Присідання</string>
     <string name="quest_plank">Планка</string>
     <string name="quest_stretch">Розтяжка</string>
-
-
     <string name="complexity_easy">Легкий</string>
     <string name="complexity_moderate">Середній</string>
     <string name="complexity_hard">Важкий</string>
-
-
     <string name="completed">Завершено</string>
     <string name="in_progress">В процесі</string>
     <string name="undo">Скасувати</string>
-
-
     <string name="quest_reminders">Нагадування про квести</string>
     <string name="daily_quests_reminder">Нагадування про щоденні квести</string>
     <string name="uncompleted_quests">У вас є незавершені квести на сьогодні!</string>
-    <string name="all_quests_completed">Усі завдання виконано!</string>
-    <string name="steps_progress">Кроки: %d/%d</string>
-    <string name="quest_completed">Завдання виконано!</string>
     <string name="day_streak_0">Серія днів: 0</string>
-
     <string name="quest_high_knees">Підйом колін</string>
-    <string name="quest_bicycle_crunches">Вправа "Велосипед"</string>
+    <string name="quest_bicycle_crunches">Вправа \"Велосипед\"</string>
     <string name="quest_lunges">Кроки з випадом</string>
     <string name="quest_sit_ups">Скручування на прес</string>
     <string name="gym">Тренажерний зал</string>
@@ -199,4 +169,53 @@
     <string name="counting_your_steps">Рахуємо ваші кроки...</string>
     <string name="widget_steps_format">%d кроків</string>
     <string name="widget_calories_format">%.1f ккал</string>
+    <string name="useful_information_title">Корисна інформація</string>
+    <string name="nutrition_tip">Порада з харчування</string>
+    <string name="sleep_tip">Порада зі сну</string>
+    <string name="hydration_tip">Порада з гідратації</string>
+    <string name="activity_tip">Порада з активності</string>
+    <string name="workout_tip">Порада з тренувань</string>
+    <string name="diet_tip">Порада з дієти</string>
+    <string name="tip_eat_vegetables_protein">Їжте більше овочів та білків.</string>
+    <string name="tip_sleep_7_8_hours">Намагайтеся спати щонайменше 7-8 годин.</string>
+    <string name="tip_drink_2_liters_water">Пийте щонайменше 2 літри води на день.</string>
+    <string name="tip_walk_30_minutes">30 хвилин ходьби щодня – хороший початок.</string>
+    <string name="tip_strength_training_3_times">Додайте силові тренування 3 рази на тиждень.</string>
+    <string name="tip_reduce_calories_500">Зменшуйте споживання калорій на 500 калорій щодня.</string>
+    <string name="tip_increase_protein_intake">Збільшуйте споживання білка до 1.6-2.2 г на кг ваги тіла.</string>
+    <string name="tip_avoid_sugary_drinks">Уникайте солодких напоїв та оброблених закусок.</string>
+    <string name="tip_balanced_diet">Дотримуйтесь збалансованої дієти з вуглеводами, білками та жирами.</string>
+    <string name="tip_stretch_10_minutes">Розтягуйтеся 10 хвилин щодня, щоб покращити гнучкість.</string>
+    <string name="error_loading_data_message">Помилка завантаження даних</string>
+    <string name="vegetablestip">Збільшуйте кількість овочів у раціоні, щоб зменшити калорії.</string>
+    <string name="addcarbsaftertrain">Додавайте вуглеводи після тренувань для відновлення.</string>
+    <string name="doalightcardio">Робіть легкі кардіо вправи 3 рази на тиждень.</string>
+    <string name="activity_recognition_permission_message">Надайте дозвіл на розпізнавання активності для підрахунку кроків.</string>
+    <string name="invalid_user_data_message">Неправильні дані користувача</string>
+    <string name="no_user_data_message">Дані користувача відсутні</string>
+    <string name="tip_create_bedtime_routine">Створіть розпорядок перед сном для покращення якості сну.</string>
+    <string name="tip_avoid_screens_before_bed">Уникайте екранів за годину до сну, щоб краще спати.</string>
+    <string name="tip_carry_water_bottle">Носіть багаторазову пляшку з водою, щоб залишатися зволоженим.</string>
+    <string name="tip_add_lemon_mint_water">Додавайте лимон або м’яту у воду для освіжаючого смаку.</string>
+    <string-array name="sex_options">
+        <item>Чоловік</item>
+        <item>Жінка</item>
+    </string-array>
+    <string-array name="goal_options">
+        <item>Схуднути</item>
+        <item>Набрати м\'язову масу</item>
+        <item>Підтримувати форму</item>
+    </string-array>
+    <string-array name="phys_level_options">
+        <item>Сидячий</item>
+        <item>Легкий</item>
+        <item>Помірний</item>
+        <item>Активний</item>
+    </string-array>
+    <string-array name="complexity_levels">
+        <item>Легкий</item>
+        <item>Середній</item>
+        <item>Важкий</item>
+    </string-array>
+    <string name="daily_tips">Щоденні поради</string>
 </resources>

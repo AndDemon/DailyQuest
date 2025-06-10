@@ -117,7 +117,7 @@ class PedometerService : Service(), SensorEventListener {
                     updateSteps(totalSteps)
                 }
                 Sensor.TYPE_STEP_DETECTOR -> {
-                    // Each step detection event increments by 1
+
                     if (it.values[0] == 1.0f) {
                         currentSteps++
                         updateStepsAfterDetection()

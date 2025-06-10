@@ -24,6 +24,7 @@ import com.hrysenko.dailyquest.services.PedometerService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Calendar
 
 class MainMenuFragment : Fragment() {
     private var _binding: FragmentMainMenuBinding? = null
@@ -65,11 +66,13 @@ class MainMenuFragment : Fragment() {
 
         loadUserData()
         updateStepsAndCaloriesUI()
+        loadAndDisplayTips()
     }
 
     override fun onResume() {
         super.onResume()
         updateStepsAndCaloriesUI()
+        loadAndDisplayTips()
     }
 
     override fun onPause() {
@@ -95,7 +98,7 @@ class MainMenuFragment : Fragment() {
             binding.dailyProgressBar.progress = 0
             Toast.makeText(
                 requireContext(),
-                "Please grant activity recognition permission to count steps.",
+                getString(R.string.activity_recognition_permission_message),
                 Toast.LENGTH_LONG
             ).show()
         }
@@ -130,7 +133,7 @@ class MainMenuFragment : Fragment() {
                 requireContext(),
                 stepsReceiver,
                 filter,
-                Context.RECEIVER_NOT_EXPORTED
+                ContextCompat.RECEIVER_NOT_EXPORTED
             )
         }
     }
@@ -158,7 +161,7 @@ class MainMenuFragment : Fragment() {
                         } else {
                             Toast.makeText(
                                 requireContext(),
-                                "Некоректні дані користувача",
+                                getString(R.string.invalid_user_data_message),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -166,7 +169,7 @@ class MainMenuFragment : Fragment() {
                         binding.streakCount.text = "0"
                         Toast.makeText(
                             requireContext(),
-                            "Дані користувача відсутні",
+                            getString(R.string.no_user_data_message),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -177,7 +180,7 @@ class MainMenuFragment : Fragment() {
                     binding.streakCount.text = "0"
                     Toast.makeText(
                         requireContext(),
-                        "Помилка завантаження даних",
+                        getString(R.string.error_loading_data_message),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -241,6 +244,59 @@ class MainMenuFragment : Fragment() {
                 getString(R.string.bmi_obese_recommendation)
             )
         }
+    }
+
+    private fun loadAndDisplayTips() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val preferences = requireContext().getSharedPreferences("DailyQuestPrefs", Context.MODE_PRIVATE)
+            val lastTipUpdate = preferences.getLong("last_tip_update", 0L)
+            val currentTime = Calendar.getInstance().timeInMillis
+            val oneDayInMillis = 24 * 60 * 60 * 1000L // 24 hours
+
+            // Check if 24 hours have passed since the last tip update
+            val tipIndex = if (currentTime - lastTipUpdate > oneDayInMillis) {
+                val newIndex = preferences.getInt("tip_index", 0) + 1
+                preferences.edit().putInt("tip_index", newIndex % 3).apply()
+                preferences.edit().putLong("last_tip_update", currentTime).apply()
+                newIndex % 3
+            } else {
+                preferences.getInt("tip_index", 0)
+            }
+
+            withContext(Dispatchers.Main) {
+                displayTips(tipIndex)
+            }
+        }
+    }
+
+    private fun displayTips(tipIndex: Int) {
+        // Tips lists
+        val nutritionTips = listOf(
+            getString(R.string.tip_eat_vegetables_protein),
+            getString(R.string.tip_balanced_diet),
+            getString(R.string.tip_avoid_sugary_drinks)
+        )
+        val sleepTips = listOf(
+            getString(R.string.tip_sleep_7_8_hours),
+            getString(R.string.tip_create_bedtime_routine),
+            getString(R.string.tip_avoid_screens_before_bed)
+        )
+        val hydrationTips = listOf(
+            getString(R.string.tip_drink_2_liters_water),
+            getString(R.string.tip_carry_water_bottle),
+            getString(R.string.tip_add_lemon_mint_water)
+        )
+        val activityTips = listOf(
+            getString(R.string.tip_walk_30_minutes),
+            getString(R.string.tip_strength_training_3_times),
+            getString(R.string.tip_stretch_10_minutes)
+        )
+
+        // Update UI with tips
+        binding.tipNutrition.text = nutritionTips[tipIndex]
+        binding.tipSleep.text = sleepTips[tipIndex]
+        binding.tipHydration.text = hydrationTips[tipIndex]
+        binding.tipActivity.text = activityTips[tipIndex]
     }
 
     override fun onDestroyView() {
