@@ -64,6 +64,7 @@ class MainMenuFragment : Fragment() {
             callback?.onCheckButtonClick()
         }
 
+        cardViewHeightAdjustment()
         loadUserData()
         updateStepsAndCaloriesUI()
         loadAndDisplayTips()
@@ -297,6 +298,25 @@ class MainMenuFragment : Fragment() {
         binding.tipSleep.text = sleepTips[tipIndex]
         binding.tipHydration.text = hydrationTips[tipIndex]
         binding.tipActivity.text = activityTips[tipIndex]
+    }
+
+    private fun cardViewHeightAdjustment(){
+        with(binding) {
+            view?.post {
+                val heights = listOf(
+                    stepsCard.height,
+                    streakCard.height,
+                    caloriesCard.height,
+                    progressCard.height
+                )
+                val maxHeight = heights.maxOrNull() ?: 0
+
+                stepsCard.layoutParams.height = maxHeight
+                streakCard.layoutParams.height = maxHeight
+                caloriesCard.layoutParams.height = maxHeight
+                progressCard.layoutParams.height = maxHeight
+            }
+        }
     }
 
     override fun onDestroyView() {

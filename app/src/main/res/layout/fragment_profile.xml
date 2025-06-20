@@ -22,7 +22,8 @@
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="16dp"
                 android:gravity="center_horizontal"
                 android:text="@string/profile"
                 android:textSize="20sp"
@@ -32,22 +33,28 @@
 
             <TextView
                 android:id="@+id/user_name_text"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textSize="28sp"
                 android:layout_marginTop="50dp"
                 android:layout_marginStart="30dp"
+                android:layout_marginEnd="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textView" />
+                app:layout_constraintTop_toBottomOf="@id/textView"
+                app:layout_constraintEnd_toStartOf="@id/edit_button"
+                tools:text="Andrii165"/>
 
             <TextView
                 android:id="@+id/user_goal_text"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:layout_marginStart="30dp"
+                android:layout_marginEnd="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/user_name_text" />
+                app:layout_constraintTop_toBottomOf="@id/user_name_text"
+                app:layout_constraintEnd_toStartOf="@id/edit_button"
+                tools:text="benc press 150 kg"/>
 
             <Button
                 style="@style/Widget.Material3.Button.Icon"
@@ -61,6 +68,13 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/user_name_text" />
 
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/user_name_barrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="user_goal_text, edit_button"/>
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_height"
                 android:layout_width="0dp"
@@ -72,14 +86,14 @@
                 app:cardCornerRadius="12dp"
                 app:layout_constraintWidth_percent="0.3"
                 app:layout_constraintHorizontal_chainStyle="spread"
-                app:layout_constraintTop_toBottomOf="@id/user_goal_text"
+                app:layout_constraintTop_toBottomOf="@id/user_name_barrier"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/card_weight"
                 style="@style/bymam">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:padding="16dp"
                     android:orientation="vertical"
                     android:gravity="center">
@@ -88,14 +102,18 @@
                         android:id="@+id/text_height"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:gravity="center"
+                        tools:text="200"/>
 
                     <TextView
                         android:id="@+id/textView2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/height"
-                        android:textSize="19sp" />
+                        android:textSize="19sp"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"/>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -110,14 +128,14 @@
                 app:cardElevation="4dp"
                 app:cardCornerRadius="12dp"
                 app:layout_constraintWidth_percent="0.3"
-                app:layout_constraintTop_toBottomOf="@id/user_goal_text"
+                app:layout_constraintTop_toBottomOf="@id/user_name_barrier"
                 app:layout_constraintStart_toEndOf="@id/card_height"
                 app:layout_constraintEnd_toStartOf="@id/card_age"
                 style="@style/bymam">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:padding="16dp"
                     android:orientation="vertical"
                     android:gravity="center">
@@ -126,13 +144,17 @@
                         android:id="@+id/text_weight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:gravity="center"
+                        tools:text="95"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/weight"
-                        android:textSize="19sp" />
+                        android:textSize="19sp"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"/>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -147,14 +169,14 @@
                 app:cardElevation="4dp"
                 app:cardCornerRadius="12dp"
                 app:layout_constraintWidth_percent="0.3"
-                app:layout_constraintTop_toBottomOf="@id/user_goal_text"
+                app:layout_constraintTop_toBottomOf="@id/user_name_barrier"
                 app:layout_constraintStart_toEndOf="@id/card_weight"
                 app:layout_constraintEnd_toEndOf="parent"
                 style="@style/bymam">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:padding="16dp"
                     android:orientation="vertical"
                     android:gravity="center">
@@ -163,17 +185,28 @@
                         android:id="@+id/text_age"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:gravity="center"
+                        tools:text="20"/>
 
                     <TextView
                         android:id="@+id/textView3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/age"
-                        android:textSize="19sp" />
+                        android:textSize="19sp"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"/>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/info_cards_barrier"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="card_height, card_weight, card_age"/>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/materialCardView2"
@@ -184,7 +217,7 @@
                 app:cardElevation="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/card_height"
+                app:layout_constraintTop_toBottomOf="@id/info_cards_barrier"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 style="@style/bymam">
@@ -209,7 +242,8 @@
                         android:layout_weight="1"
                         android:text="@string/notification"
                         android:textSize="19sp"
-                        android:textStyle="normal" />
+                        android:textStyle="normal"
+                        android:layout_marginEnd="16dp"/>
 
                     <com.google.android.material.materialswitch.MaterialSwitch
                         android:id="@+id/switch_material"
@@ -226,7 +260,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="16dp"
                 app:cardElevation="2dp"
                 app:cardCornerRadius="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -289,6 +323,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/card_support"
+                app:layout_constraintBottom_toBottomOf="parent"
                 style="@style/bymam"
                 android:clickable="true"
                 android:focusable="true"
